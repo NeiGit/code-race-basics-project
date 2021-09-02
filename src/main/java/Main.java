@@ -1,3 +1,4 @@
+import ejercicios.Class1Exercises;
 import ejercicios.ExampleExerciseBundle;
 import menu.Menu;
 
@@ -7,6 +8,7 @@ public class Main {
         final Menu mainMenu = new Menu("Ejercicios");
 
         ExampleExerciseBundle.subscribeToMenu(mainMenu);
+        Class1Exercises.subscribeToMenu(mainMenu);
 
         mainMenu.execute();
     }
