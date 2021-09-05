@@ -2,8 +2,10 @@ package ejercicios;
 
 import menu.Menu;
 
-import static util.IOUtil.intInput;
-import static util.IOUtil.print;
+import java.util.ArrayList;
+import java.util.List;
+
+import static util.IOUtil.*;
 
 public class Class1Exercises {
 
@@ -17,6 +19,7 @@ public class Class1Exercises {
         exercises.addItem("Ejercicio 5", Class1Exercises::exercise5);
         exercises.addItem("Ejercicio 6", Class1Exercises::exercise6);
         exercises.addItem("Ejercicio 7", Class1Exercises::exercise7);
+        exercises.addItem("Ejercicio 8", Class1Exercises::exercise8);
 
     }
 
@@ -116,6 +119,99 @@ public class Class1Exercises {
             printTrue();
         }
     }
+
+/*    8. Ingresar dos colores. Pueden ser los tres primarios o sus combinaciones. Si los dos colores son primarios,
+    devolver el color que se forma. Si uno es secundario y el otro es uno de sus primarios, devolver el secundario
+    sumándole "claro"/"oscuro" según sea el caso. Si los dos son secundarios, o si uno es primario pero no forma parte
+    del secundario, devolver 'marrón'. Si alguno es inexistente, indicar "error". Pista -> pasar a minúscula.
+
+    Ejemplos de entrada y salida:
+    Entrada: "azul", "amarillo". Salida: "verde"
+    Entrada: "rojo", "violeta". Salida: "Violeta claro" (con azul sería “oscuro”)
+    Entrada: "verde", "rojo". Salida: "Marrón"
+    Entrada: "azul", "jamón". Salida "Error"*/
+
+    public static void exercise8() {
+        final String color1 = stringInput("Ingrese un color").toLowerCase();
+        final String color2 = stringInput("Ingrese otro color").toLowerCase();
+
+        final String rojo = "rojo";
+        final String amarillo = "amarillo";
+        final String azul = "azul";
+
+        final String naranja = "naranja";
+        final String violeta = "violeta";
+        final String verde = "verde";
+
+        final String marron = "marrón";
+        final String error = "error";
+
+        final String darker = " más oscuro";
+        final String lighter = " más claro";
+
+        final List<String> validColors = new ArrayList<>();
+        validColors.add(rojo);
+        validColors.add(amarillo);
+        validColors.add(azul);
+        validColors.add(naranja);
+        validColors.add(violeta);
+        validColors.add(verde);
+
+        if (!validColors.contains(color1) || !validColors.contains(color2)) {
+            print(error);
+            return;
+        }
+
+        final String userInput = color1 + color2;
+
+        if (color1.equals(color2)) {
+            print(color1);
+            return;
+        }
+
+        switch (userInput) {
+            case rojo + amarillo:
+            case amarillo + rojo:
+                print(naranja);
+                break;
+
+            case rojo + azul:
+            case azul + rojo:
+                print(violeta);
+                break;
+
+            case amarillo + azul:
+            case azul + amarillo:
+                print(verde);
+                break;
+
+            case verde + amarillo:
+                print(verde + lighter);
+                break;
+            case verde + azul:
+                print(verde + darker);
+                break;
+
+            case violeta + rojo:
+                print(violeta + lighter);
+                break;
+            case violeta + azul:
+                print(violeta + darker);
+                break;
+
+            case naranja + amarillo:
+                print(naranja + lighter);
+                break;
+            case naranja + rojo:
+                print(naranja + darker);
+                break;
+
+            default:
+                print(marron);
+                break;
+        }
+    }
+
 
     // ----------- Libraries --------------
 
