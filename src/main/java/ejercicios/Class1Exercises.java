@@ -20,6 +20,8 @@ public class Class1Exercises {
         exercises.addItem("Ejercicio 6", Class1Exercises::exercise6);
         exercises.addItem("Ejercicio 7", Class1Exercises::exercise7);
         exercises.addItem("Ejercicio 8", Class1Exercises::exercise8);
+        exercises.addItem("Ejercicio 9", Class1Exercises::exercise9);
+
 
     }
 
@@ -211,6 +213,64 @@ public class Class1Exercises {
                 break;
         }
     }
+
+/*    9. Calculadora:
+    Ingresar un texto: "sum", "subtract", "multiply", "divide", "percentage".
+    Ingresar dos números y mostrar por pantalla el resultado de la operación.
+    Mostrar "error" si la operación es inválida o si se divide por 0.*/
+
+    public static void exercise9() {
+        final String sum = "sum";
+        final String subtract = "subtract";
+        final String multiply = "multiply";
+        final String divide = "divide";
+        final String percentage = "percentage";
+
+        final double FULL_PERCENTAGE = 100;
+
+        final String operation = stringInput("Ingrese una operación").toLowerCase();
+
+        // validate operation
+        if (!sum.equals(operation) && !subtract.equals(operation) && !multiply.equals(operation)
+            && !divide.equals(operation) && !percentage.equals(operation)) {
+            print("error");
+            return;
+        }
+
+        final double num1 = doubleInput("Ingrese un número");
+        final double num2 = doubleInput("Ingrese otro número");
+
+        //validate divide by zero
+        if (operation.equals(divide) && num2 == 0) {
+            print("error");
+            return;
+        }
+
+        //validate negative percentage
+        if (operation.equals(percentage) && num2 < 0) {
+            print("error");
+            return;
+        }
+
+        switch (operation) {
+            case sum:
+                print(num1 + num2);
+                break;
+            case subtract:
+                print(num1 - num2);
+                break;
+            case multiply:
+                print(num1 * num2);
+                break;
+            case divide:
+                print(num1 / num2);
+                break;
+            case percentage:
+                print(num1 * (num2 / FULL_PERCENTAGE));
+                break;
+        }
+    }
+
 
 
     // ----------- Libraries --------------
