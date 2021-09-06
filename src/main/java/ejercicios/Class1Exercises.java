@@ -21,8 +21,7 @@ public class Class1Exercises {
         exercises.addItem("Ejercicio 7", Class1Exercises::exercise7);
         exercises.addItem("Ejercicio 8", Class1Exercises::exercise8);
         exercises.addItem("Ejercicio 9", Class1Exercises::exercise9);
-
-
+        exercises.addItem("Ejercicio 10", Class1Exercises::exercise10);
     }
 
     // 1. Ingresar un número entero. En caso de ser positivo indicar ‘true’ por pantalla.
@@ -269,6 +268,78 @@ public class Class1Exercises {
                 print(num1 * (num2 / FULL_PERCENTAGE));
                 break;
         }
+    }
+
+    /*10. Modelar el juego “piedra, papel o tijera”. Primero cada jugador ingresará su nombre.
+    Luego elige la opción primero el jugador uno y luego el dos. Mostrar por pantalla el ganador o error si ingresan una opción inválida.
+    En caso de empate, repetir el juego, y si se vuelve a empatar mostrar “Empate”.*/
+
+    public static void exercise10() {
+        final String player1 = stringInput("Jugador uno: Ingrese su nombre");
+        final String player2 = stringInput("Jugador dos: Ingrese su nombre");
+
+        executePiedraPapelOTijera(player1, player2);
+    }
+
+    private static void executePiedraPapelOTijera(String player1, String player2) {
+        final String result = playPiedraPapelOTijera(player1, player2);
+
+        if (result.equals("error")) {
+            print("error");
+        } else if (result.equals("empate")) {
+            executePiedraPapelOTijera(player1, player2); // recursividad
+        } else {
+            print("El ganador es: " + result);
+        }
+    }
+
+    private static String playPiedraPapelOTijera(String player1, String player2) {
+        String result = "";
+
+        final String player1Choice = stringInput(player1 + ": Ingrese su opción").toLowerCase();
+        final String player2Choice = stringInput(player2 + ": Ingrese su opción").toLowerCase();
+
+        final String piedra = "piedra";
+        final String papel = "papel";
+        final String tijera = "tijera";
+
+        if (!piedra.equals(player1Choice) && !papel.equals(player1Choice) && !tijera.equals(player1Choice)) {
+            return "error";
+        } else if (!piedra.equals(player2Choice) && !papel.equals(player2Choice) && !tijera.equals(player2Choice)) {
+            return "error";
+        }
+
+        switch (player1Choice) {
+            case piedra:
+                if (player2Choice.equals(papel)) {
+                    result = player2;
+                } else if (player2Choice.equals(tijera)) {
+                    result = player1;
+                } else {
+                    result = "empate";
+                }
+                break;
+            case papel:
+                if (player2Choice.equals(piedra)) {
+                    result = player1;
+                } else if (player2Choice.equals(tijera)) {
+                    result = player2;
+                } else {
+                    result = "empate";
+                }
+                break;
+            case tijera:
+                if (player2Choice.equals(papel)) {
+                    result = player1;
+                } else if (player2Choice.equals(piedra)) {
+                    result = player2;
+                } else {
+                    result = "empate";
+                }
+                break;
+        }
+
+        return result;
     }
 
 
