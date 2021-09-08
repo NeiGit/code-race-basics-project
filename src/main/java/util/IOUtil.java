@@ -10,7 +10,7 @@ import java.util.function.Supplier;
 public class IOUtil {
     private static final Scanner input = new Scanner(System.in);
 
-    public static void print(@NotNull final Object o) {
+    public static void print(final Object o) {
         System.out.println(o);
     }
 
