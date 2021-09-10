@@ -14,6 +14,8 @@ public class Class2Exercises {
         exercises.addItem("Ejercicio 3", Class2Exercises::exercise3);
         exercises.addItem("Ejercicio 4", Class2Exercises::exercise4);
         exercises.addItem("Ejercicio 5", Class2Exercises::exercise5);
+        exercises.addItem("Ejercicio 6", Class2Exercises::exercise6);
+        exercises.addItem("Ejercicio 7", Class2Exercises::exercise7);
     }
 
     /*1- Ingresar un número. Mostrar todos los números hasta llegar a su opuesto.*/
@@ -87,6 +89,60 @@ public class Class2Exercises {
         }
 
         print(result);
+    }
+
+    // 6- Ingresar un texto. Mostrar sólo las consonantes en mayúscula.
+    public static void exercise6() {
+        final String text = stringInput("Ingrese un texto").toUpperCase();
+
+        final char[] charArray = text.toCharArray();
+
+        String result = "";
+
+        for (char c : charArray) {
+            if (isConsonant(c)) {
+                result += c;
+            }
+        }
+
+        print(result);
+    }
+
+    // 7- Ingresar un texto y una letra.
+    // Mostrar la cantidad de ocurrencias de esa letra ignorando mayúsculas/minúsculas.
+    public static void exercise7() {
+        final String text = stringInput("Ingrese un texto").toLowerCase();
+        final String character = stringInput("Ingrese una letra").toLowerCase();
+
+        if (character.length() != 1) {
+            print("Ingreso inválido");
+        } else {
+            final int originalLength = text.length();
+            final int lengthWithoutCharacter = text.replace(character, "").length();
+
+            final int occurrencesOfCharacter = originalLength - lengthWithoutCharacter;
+
+            print(occurrencesOfCharacter);
+        }
+    }
+
+    private static boolean isConsonant(char value) {
+        final char[] consonants = new char[] {'b', 'c', 'd', 'f', 'g', 'h', 'j', 'k', 'l',
+        'm', 'n', 'ñ', 'p', 'q', 'r', 's', 't', 'v', 'w', 'x', 'y', 'z'};
+
+        final String charToLowerCase = String.valueOf(value).toLowerCase();
+
+        final char c = charToLowerCase.toCharArray()[0];
+
+        boolean isConsonant = false;
+        int index = 0;
+
+        while(!isConsonant && index < consonants.length) {
+            isConsonant = c == consonants[index];
+            index ++;
+        }
+
+        return isConsonant;
     }
 
 }
