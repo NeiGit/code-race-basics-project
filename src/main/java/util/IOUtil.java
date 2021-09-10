@@ -38,6 +38,9 @@ public class IOUtil {
         return new SafeInput<Double>(promptMessage, condition, () -> Double.parseDouble(input.nextLine())).ensureInput();
     }
 
+    public static void printTrue() {
+        print(true);
+    }
 
     private static class SafeInput<T> {
         @NotNull Predicate<T> condition;

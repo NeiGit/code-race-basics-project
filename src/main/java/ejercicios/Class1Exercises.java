@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static util.IOUtil.*;
+import static util.NumberUtil.*;
 
 public class Class1Exercises {
 
@@ -340,25 +341,5 @@ public class Class1Exercises {
         }
 
         return result;
-    }
-
-
-
-    // ----------- Libraries --------------
-
-    private static boolean isPositive(int num) {
-        return num > 0;
-    }
-
-    private static boolean isNegative(int num) {
-        return num < 0;
-    }
-
-    private static boolean isEven(int num) {
-        return num % 2 == 0;
-    }
-
-    private static void printTrue() {
-        print(true);
     }
 }
