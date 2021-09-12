@@ -11,13 +11,13 @@ public class Class2ExercisesCollections {
     public static void subscribeToMenu(Menu mainMenu) {
         final Menu exercises = new Menu("Ejercicios de collections clase 2", mainMenu);
 
-        exercises.addItem("Ejercicio 1", Class2ExercisesCollections::exercise1);
-        exercises.addItem("Ejercicio 2", Class2ExercisesCollections::exercise2);
-        exercises.addItem("Ejercicio 3", Class2ExercisesCollections::exercise3);
-        exercises.addItem("Ejercicio 4", Class2ExercisesCollections::exercise4);
-        exercises.addItem("Ejercicio 5", Class2ExercisesCollections::exercise5);
-        /* exercises.addItem("Ejercicio 6", Class2ExercisesCollections::exercise6);
-        exercises.addItem("Ejercicio 7", Class2ExercisesCollections::exercise7);*/
+        exercises.addDelayedItem("Ejercicio 1", Class2ExercisesCollections::exercise1);
+        exercises.addDelayedItem("Ejercicio 2", Class2ExercisesCollections::exercise2);
+        exercises.addDelayedItem("Ejercicio 3", Class2ExercisesCollections::exercise3);
+        exercises.addDelayedItem("Ejercicio 4", Class2ExercisesCollections::exercise4);
+        exercises.addDelayedItem("Ejercicio 5", Class2ExercisesCollections::exercise5);
+        /* exercises.addDelayedItem("Ejercicio 6", Class2ExercisesCollections::exercise6);
+        exercises.addDelayedItem("Ejercicio 7", Class2ExercisesCollections::exercise7);*/
     }
 
     // 1 - Cargar dos listas de 5 personas indicando su nombre.

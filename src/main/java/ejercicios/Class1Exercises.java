@@ -13,16 +13,16 @@ public class Class1Exercises {
     public static void subscribeToMenu(Menu mainMenu) {
         final Menu exercises = new Menu("Ejercicios condicionales clase 1", mainMenu);
 
-        exercises.addItem("Ejercicio 1", Class1Exercises::exercise1);
-        exercises.addItem("Ejercicio 2", Class1Exercises::exercise2);
-        exercises.addItem("Ejercicio 3", Class1Exercises::exercise3);
-        exercises.addItem("Ejercicio 4", Class1Exercises::exercise4);
-        exercises.addItem("Ejercicio 5", Class1Exercises::exercise5);
-        exercises.addItem("Ejercicio 6", Class1Exercises::exercise6);
-        exercises.addItem("Ejercicio 7", Class1Exercises::exercise7);
-        exercises.addItem("Ejercicio 8", Class1Exercises::exercise8);
-        exercises.addItem("Ejercicio 9", Class1Exercises::exercise9);
-        exercises.addItem("Ejercicio 10", Class1Exercises::exercise10);
+        exercises.addDelayedItem("Ejercicio 1", Class1Exercises::exercise1);
+        exercises.addDelayedItem("Ejercicio 2", Class1Exercises::exercise2);
+        exercises.addDelayedItem("Ejercicio 3", Class1Exercises::exercise3);
+        exercises.addDelayedItem("Ejercicio 4", Class1Exercises::exercise4);
+        exercises.addDelayedItem("Ejercicio 5", Class1Exercises::exercise5);
+        exercises.addDelayedItem("Ejercicio 6", Class1Exercises::exercise6);
+        exercises.addDelayedItem("Ejercicio 7", Class1Exercises::exercise7);
+        exercises.addDelayedItem("Ejercicio 8", Class1Exercises::exercise8);
+        exercises.addDelayedItem("Ejercicio 9", Class1Exercises::exercise9);
+        exercises.addDelayedItem("Ejercicio 10", Class1Exercises::exercise10);
     }
 
     // 1. Ingresar un número entero. En caso de ser positivo indicar ‘true’ por pantalla.
