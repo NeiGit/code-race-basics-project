@@ -5,17 +5,17 @@ import menu.Menu;
 import static util.IOUtil.*;
 import static util.NumberUtil.isEven;
 
-public class Class2Exercises {
+public class Class2ExercisesLoopsAndText {
     public static void subscribeToMenu(Menu mainMenu) {
         final Menu exercises = new Menu("Ejercicios de ciclos / texto clase 2", mainMenu);
 
-        exercises.addItem("Ejercicio 1", Class2Exercises::exercise1);
-        exercises.addItem("Ejercicio 2", Class2Exercises::exercise2);
-        exercises.addItem("Ejercicio 3", Class2Exercises::exercise3);
-        exercises.addItem("Ejercicio 4", Class2Exercises::exercise4);
-        exercises.addItem("Ejercicio 5", Class2Exercises::exercise5);
-        exercises.addItem("Ejercicio 6", Class2Exercises::exercise6);
-        exercises.addItem("Ejercicio 7", Class2Exercises::exercise7);
+        exercises.addItem("Ejercicio 1", Class2ExercisesLoopsAndText::exercise1);
+        exercises.addItem("Ejercicio 2", Class2ExercisesLoopsAndText::exercise2);
+        exercises.addItem("Ejercicio 3", Class2ExercisesLoopsAndText::exercise3);
+        exercises.addItem("Ejercicio 4", Class2ExercisesLoopsAndText::exercise4);
+        exercises.addItem("Ejercicio 5", Class2ExercisesLoopsAndText::exercise5);
+        exercises.addItem("Ejercicio 6", Class2ExercisesLoopsAndText::exercise6);
+        exercises.addItem("Ejercicio 7", Class2ExercisesLoopsAndText::exercise7);
     }
 
     /*1- Ingresar un número. Mostrar todos los números hasta llegar a su opuesto.*/
