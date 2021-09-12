@@ -14,8 +14,8 @@ import static util.IOUtil.intInput;
 import static util.IOUtil.print;
 
 public class Menu implements MenuItem {
-    private static final Supplier<MenuItem> DEFAULT_END_ITEM = () -> MenuItem.create("--- SALIR ---", () -> print("Finalizado"), true);
-    private static final Function<MenuItem, MenuItem> BACK_ITEM = m -> MenuItem.create("--- VOLVER ---", m::execute, true);
+    private static final Supplier<MenuItem> DEFAULT_END_ITEM = () -> MenuItem.create("--- SALIR ---", () -> print("Finalizado"), true, false);
+    private static final Function<MenuItem, MenuItem> BACK_ITEM = m -> MenuItem.create("--- VOLVER ---", m::execute, true, false);
     private static final int DEFAULT_END_KEY = 0;
 
     public static final String ANSI_BLUE = "\u001B[34m";
@@ -54,11 +54,15 @@ public class Menu implements MenuItem {
     }
 
     public void addItem(String description, Runnable execution) {
-        addItem(description, execution, false);
+        addItem(description, execution, false, false);
     }
 
-    public void addItem(String description, Runnable execution, boolean isFinalAction) {
-        addItem(MenuItem.create(description, execution, isFinalAction));
+    public void addDelayedItem(String description, Runnable execution) {
+        addItem(description, execution, false, true);
+    }
+
+    public void addItem(String description, Runnable execution, boolean isFinalAction, boolean isDelayed) {
+        addItem(MenuItem.create(description, execution, isFinalAction, isDelayed));
     }
 
     @Override
@@ -71,7 +75,15 @@ public class Menu implements MenuItem {
             items.forEach((k, i) -> print(String.format("%s - %s", k, i.getDescription())));
             option = intInput("Seleccione una opción", i -> i >= DEFAULT_END_KEY && i < items.size());
             print(ANSI_RESET);
-            items.get(option).execute();
+            final MenuItem item = items.get(option);
+            item.execute();
+            if (item.isDelayed()) {
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    print("Error trying to delay output: " + e);
+                }
+            }
         } while (!(items.get(option).isFinalAction()));
     }
 
