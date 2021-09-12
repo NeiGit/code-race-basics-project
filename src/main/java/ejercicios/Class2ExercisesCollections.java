@@ -16,8 +16,8 @@ public class Class2ExercisesCollections {
         exercises.addDelayedItem("Ejercicio 3", Class2ExercisesCollections::exercise3);
         exercises.addDelayedItem("Ejercicio 4", Class2ExercisesCollections::exercise4);
         exercises.addDelayedItem("Ejercicio 5", Class2ExercisesCollections::exercise5);
-        /* exercises.addDelayedItem("Ejercicio 6", Class2ExercisesCollections::exercise6);
-        exercises.addDelayedItem("Ejercicio 7", Class2ExercisesCollections::exercise7);*/
+        exercises.addDelayedItem("Ejercicio 6", Class2ExercisesCollections::exercise6);
+        exercises.addDelayedItem("Ejercicio 7", Class2ExercisesCollections::exercise7);
     }
 
     // 1 - Cargar dos listas de 5 personas indicando su nombre.
@@ -203,6 +203,101 @@ public class Class2ExercisesCollections {
         }
     }
 
+    public static void exercise6() {
+        final Map<Scale, Integer> offsetByScale = new HashMap<>();
+        offsetByScale.put(Scale.JONICO, 0);
+        offsetByScale.put(Scale.DORICO, 1);
+        offsetByScale.put(Scale.FRIGIO, 2);
+        offsetByScale.put(Scale.LIDIO, 3);
+        offsetByScale.put(Scale.MIXOLIDIO, 4);
+        offsetByScale.put(Scale.EOLICO, 5);
+        offsetByScale.put(Scale.LOCRIO, 6);
+
+        offsetByScale.forEach((scale, offset) -> {
+            String notesJoined = "";
+            int loops = 0;
+            int index = offset;
+
+            final Note[] notes = Note.values();
+            final int notesLength = notes.length;
+
+            while(loops < notesLength) {
+                if (index == notesLength) {
+                    index = 0;
+                }
+
+                notesJoined = notesJoined + notes[index];
+
+                if (loops < notesLength - 1) {
+                    notesJoined += ", ";
+                }
+
+                index ++;
+                loops ++;
+            }
+
+            print(String.format("%s -> %s", scale, notesJoined));
+        });
+    }
+
+    // todo explicar .map
+    /* 7 - Ingresar un número. Mostrar la secuencia de nombres, sin usar if / switch.
+    Por ejemplo 123 -> mostrar UNO-DOS-TRES.
+    ¿Se puede reutilizar la solución para hacer el camino inverso? Ingresar UNO-DOS-TRES -> mostrar 123 */
+    public static void exercise7() {
+        Map<Character, Number> numberNamesByValue = new HashMap<>();
+        numberNamesByValue.put('1', Number.ONE);
+        numberNamesByValue.put('2', Number.TWO);
+        numberNamesByValue.put('3', Number.THREE);
+        numberNamesByValue.put('4', Number.FOUR);
+        numberNamesByValue.put('5', Number.FIVE);
+        numberNamesByValue.put('6', Number.SIX);
+        numberNamesByValue.put('7', Number.SEVEN);
+        numberNamesByValue.put('8', Number.EIGHT);
+        numberNamesByValue.put('9', Number.NINE);
+
+        final int num = intInput("Ingrese un número entero");
+
+        final char[] numChars = String.valueOf(num).toCharArray();
+
+        String numNamesJoined = "";
+        for (char numChar : numChars) {
+            if (!numNamesJoined.isEmpty()) {
+                numNamesJoined += "-";
+            }
+
+            numNamesJoined += numberNamesByValue.get(numChar);
+        }
+
+        print(numNamesJoined);
+
+        final String stringNums = stringInput("Ingrese secuencia de numeros separada por guión");
+
+        final String[] stringNumsArray = stringNums.split("-");
+
+        String numCharsJoined = "";
+        for (String s : stringNumsArray) {
+            final Number number = Number.fromString(s);
+
+            Character numChar = null;
+            int index = 1;
+
+            while(numChar == null && index <= numberNamesByValue.size()) {
+                final char key = Character.forDigit(index, 10);
+                final Number n = numberNamesByValue.get(key);
+                if (n == number) {
+                    numChar = key;
+                }
+
+                index ++;
+            }
+
+            numCharsJoined += numChar;
+        }
+
+        print(numCharsJoined);
+    }
+
 
 
     private static List<String> createListOfNames(int size, String listName) {
@@ -302,6 +397,37 @@ public class Class2ExercisesCollections {
             }
 
             return color;
+        }
+    }
+
+    private enum Note {
+        DO, RE, MI, FA, SOL, LA, SI;
+    }
+
+    private enum Scale {
+        JONICO, DORICO, FRIGIO, LIDIO, MIXOLIDIO, EOLICO, LOCRIO;
+    }
+
+    private enum Number {
+        ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE;
+
+        public static Number fromString(String value) {
+            Number number = null;
+            int index = 0;
+
+            final Number[] numbers = Number.values();
+
+            while(number == null && index < numbers.length) {
+                final Number n = numbers[index];
+
+                if (n.toString().equalsIgnoreCase(value)) {
+                    number = n;
+                }
+
+                index ++;
+            }
+
+            return number;
         }
     }
 }
