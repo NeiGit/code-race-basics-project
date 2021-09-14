@@ -5,6 +5,8 @@ import menu.Menu;
 import java.util.*;
 
 import static util.IOUtil.*;
+import static util.NumberUtil.sortIntegerListAscending;
+import static util.NumberUtil.sortIntegerListDescending;
 
 public class Class2ExercisesCollections {
 
@@ -96,7 +98,7 @@ public class Class2ExercisesCollections {
             podiumMap.put(Podium.SUB_CHAMPION, teamByScore.get(sortedScores.get(1)));
             podiumMap.put(Podium.THIRD_PLACE, teamByScore.get(sortedScores.get(2)));
 
-            podiumMap.forEach((k, v) -> print(String.format("%s-%s", k, v)));
+            podiumMap.forEach((k, v) -> print(String.format("%s-%s", k, v))); //todo forEach
         }
     }
 
@@ -240,7 +242,7 @@ public class Class2ExercisesCollections {
         });
     }
 
-    // todo explicar .map
+
     /* 7 - Ingresar un número. Mostrar la secuencia de nombres, sin usar if / switch.
     Por ejemplo 123 -> mostrar UNO-DOS-TRES.
     ¿Se puede reutilizar la solución para hacer el camino inverso? Ingresar UNO-DOS-TRES -> mostrar 123 */
@@ -276,7 +278,7 @@ public class Class2ExercisesCollections {
         final String[] stringNumsArray = stringNums.split("-");
 
         String numCharsJoined = "";
-        for (String s : stringNumsArray) {
+        for (String s : stringNumsArray) { // todo map!!
             final Number number = Number.fromString(s);
 
             Character numChar = null;
@@ -320,48 +322,6 @@ public class Class2ExercisesCollections {
         return listOfNumbers;
     }
 
-    private static List<Integer> sortIntegerListAscending(List<Integer> numbers) {
-        return sortIntegerList(numbers, SortType.ASC);
-    }
-
-    private static List<Integer> sortIntegerListDescending(List<Integer> numbers) {
-        return sortIntegerList(numbers, SortType.DESC);
-    }
-
-    private static List<Integer> sortIntegerList(List<Integer> numbers1, SortType sortType) {
-        final List<Integer> numbersOrdered = new ArrayList<>();
-        numbersOrdered.add(numbers1.get(0));
-
-        for(int i = 1; i < numbers1.size(); i ++) {
-            int candidate = numbers1.get(i);
-
-            int index = 0;
-            boolean found = false;
-
-            while(!found && index < numbersOrdered.size()) {
-
-                if (sortType == SortType.ASC) {
-                    found = candidate <= numbersOrdered.get(index);
-                } else if (sortType == SortType.DESC) {
-                    found = candidate >= numbersOrdered.get(index);
-                }
-
-                if (!found) {
-                    index ++;
-                }
-            }
-
-            numbersOrdered.add(index, candidate);
-        }
-
-        return numbersOrdered;
-    }
-
-
-    private enum SortType {
-        ASC, DESC
-    }
-
     private enum Podium {
         CHAMPION, SUB_CHAMPION, THIRD_PLACE
     }
@@ -380,7 +340,7 @@ public class Class2ExercisesCollections {
         // other
         BROWN;
 
-        public static Color fromString(String value) {
+        public static Color fromString(String value) { // todo enum factory method
             Color color = null;
             int index = 0;
 
