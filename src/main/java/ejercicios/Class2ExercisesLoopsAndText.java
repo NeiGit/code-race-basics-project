@@ -5,6 +5,7 @@ import menu.Menu;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 import static util.IOUtil.*;
 import static util.NumberUtil.isEven;
@@ -27,6 +28,11 @@ public class Class2ExercisesLoopsAndText {
         exercises.addDelayedItem("Ejercicio 11", Class2ExercisesLoopsAndText::exercise11);
         exercises.addDelayedItem("Ejercicio 12", Class2ExercisesLoopsAndText::exercise12);
         exercises.addDelayedItem("Ejercicio 13", Class2ExercisesLoopsAndText::exercise13);
+
+        exercises.addDelayedItem("Ejercicio 15", Class2ExercisesLoopsAndText::exercise15);
+
+        exercises.addDelayedItem("Ejercicio 17", Class2ExercisesLoopsAndText::exercise17);
+        exercises.addDelayedItem("Ejercicio 18", Class2ExercisesLoopsAndText::exercise18);
     }
 
     /*1- Ingresar un número. Mostrar todos los números hasta llegar a su opuesto.*/
@@ -233,7 +239,7 @@ public class Class2ExercisesLoopsAndText {
 /*  13- Ingresar un número entero de 3 cifras. Mostrar los siguientes 3 números de 3 cifras que contengan esas 3 cifras.
     En caso de llegar al máximo, empezar de nuevo.
     Ej.: entrada 312 - salida: 321, 123, 132*/
-    public static void exercise13() {
+    public static void exercise13() { // TODO work in progress....
         final int num = intInput("Ingrese un número entero de 3 cifras", i -> String.valueOf(i).length() == 3);
 
         final List<String> digitStringList = new ArrayList<>(Arrays.asList(String.valueOf(num).split(""))); // todo refactor
@@ -278,7 +284,104 @@ public class Class2ExercisesLoopsAndText {
 
     }
 
-    private static boolean isConsonant(char value) {
+/*    15- Ingresar un número del 1 al 10 y un caracter.
+    Imprimir un cuadro de "-" con una escalera descendente formada con ese caracter.
+    Por ejemplo
+    Entrada: 6 y 'a'
+    Salida:
+    a-----
+    aa----
+    aaa---
+    aaaa--
+    aaaaa-
+    aaaaaa*/
+    public static void exercise15() {
+        final int steps = intInput("Ingrese un número del 1 al 10", i -> i > 1 && i <= 10);
+        final String character = stringInput("Ingrese un caracter", s -> s.length() == 1);
+
+        for (int step = 1; step <= steps; step++) { //todo explicar que acá uso el index por su valor e inicia en 1
+            final int dashes = steps - step;
+            final int characters = step;
+
+            String result = "";
+
+            for (int i = 0; i < characters; i++) { //todo explicar que acá sólo quiero iterar n veces no me importa el valor
+                result += character;
+            }
+
+            for (int i = 0; i < dashes; i++) {
+                result += "-";
+            }
+
+            print(result);
+        }
+    }
+
+/*    16- Ingresar un número del 1 al 10 y un caracter. Imprimir una pirámide con ese caracter.
+    Por ejemplo
+    Entrada: 6 y 'a'
+    //todo buildStringWithCharacterNTimes()
+    */
+
+
+/*    17- Ingresar un número entero del 1 al 19.
+    Randomizar un número entero positivo (tipo de dato long) cuya cantidad de cifras sea el número ingresado.*/
+    public static void exercise17() {
+        final int digits = intInput("Ingrese un número entero del 1 al 19", i -> i >= 1 && i <= 19);
+
+        final long randomPositiveLong = randomizePositiveLong(digits);
+
+        print(randomPositiveLong);
+    }
+
+/*    18- Billetera
+    Ingresar un monto inicial de balance (double).
+    Ingresar operación: 1 = ingreso, 2 = extracción, 3 = terminar.
+    Si se elige ingreso, ingresar un monto y descontarle el 30% de ganancias (redondear a entero). Sumar al balance
+    Si se elige extracción, ingresar un monto y descontarlo del balance. No puede bajar de 0.
+    Al finalizar mostrar el balance.*/
+    public static void exercise18() {
+        double balance = doubleInput("Ingrese un balance inicial de billetera");
+
+        Operation operation = Operation.promptChoice();
+
+        while (operation != Operation.END) { // todo explicar doWhile
+            if (operation == Operation.DEPOSIT) {
+                final double depositAmount = doubleInput("Ingrese monto a depositar", d -> d > 0);
+
+                balance += depositAmount;
+                print(String.format("Se han depositado exitosamente $%s", depositAmount));
+
+            } else if (operation == Operation.EXTRACTION) {
+                final double extractionAmount = doubleInput("Ingrese monto a extraer", d -> d > 0);
+
+                if (extractionAmount <= balance) {
+                    balance -= extractionAmount;
+                    print(String.format("Se han extraido exitosamente $%s", extractionAmount));
+                } else {
+                    print("Fondos insuficientes para realizar la extracción");
+                }
+            }
+
+            print(String.format("Balance: $%s", balance));
+
+            operation = Operation.promptChoice();
+        }
+    }
+
+    private static long randomizePositiveLong(int digits) { // todo llevar a NumberUtils
+        final Random random = new Random();
+        final long randomLong = random.nextLong();
+
+        final String stringResult = String.valueOf(randomLong)
+                .replace("-", "")
+                .substring(0, digits);
+
+        return Long.parseLong(stringResult);
+    }
+
+
+    private static boolean isConsonant(char value) { // todo refactor
         final char[] consonants = new char[] {'b', 'c', 'd', 'f', 'g', 'h', 'j', 'k', 'l',
         'm', 'n', 'ñ', 'p', 'q', 'r', 's', 't', 'v', 'w', 'x', 'y', 'z'};
 
@@ -313,6 +416,27 @@ public class Class2ExercisesLoopsAndText {
         }
 
         return isConsonant;
+    }
+
+    private enum Operation {
+        DEPOSIT, EXTRACTION, END;
+
+        public static Operation promptChoice() {
+            return fromChoice(intInput("Ingrese una operación: 1 = ingreso, 2 = extracción, 3 = terminar", i -> i >= 1 && i <= 3));
+        }
+
+        public static Operation fromChoice(int choice) {
+            switch (choice) {
+                case 1:
+                    return DEPOSIT;
+                case 2:
+                    return EXTRACTION;
+                case 3:
+                    return END;
+            }
+
+            return null;
+        }
     }
 
 }
