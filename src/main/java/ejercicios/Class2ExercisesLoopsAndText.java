@@ -33,6 +33,7 @@ public class Class2ExercisesLoopsAndText {
 
         exercises.addDelayedItem("Ejercicio 17", Class2ExercisesLoopsAndText::exercise17);
         exercises.addDelayedItem("Ejercicio 18", Class2ExercisesLoopsAndText::exercise18);
+        exercises.addDelayedItem("Ejercicio 19", Class2ExercisesLoopsAndText::exercise19);
     }
 
     /*1- Ingresar un número. Mostrar todos los números hasta llegar a su opuesto.*/
@@ -369,6 +370,61 @@ public class Class2ExercisesLoopsAndText {
         }
     }
 
+    /*19- Movimiento
+    Nivel 1. Nos encontramos en una habitación de 4x4 (metros).
+    Ingresar un número para avanzar un metro: 1 = adelante, 2 = atrás, 3 = izquierda, 4 = derecha, cualquier otro = terminar.
+    Informar cuando se llegue a una pared y no permitir el avance en esa dirección. En cada paso mostrar las coordenadas, empezando siempre en [0-0].
+    Nivel 2. Ingresar el metraje del recinto (siempre cubo). Ej.: ingreso 10, la habitación será de 10x10.
+    Nivel 3. Rectángulo. Ej.: ingreso 4 y 6, la habitación es de 4x6.*/
+
+    public static void exercise19() {
+        final int xMax = 4;
+        final int yMax = 4;
+
+        int x = 0;
+        int y = 0;
+
+        Movement movement = Movement.promptChoice();
+
+        while (movement != Movement.END) {
+            switch (movement) {
+                case FORWARD:
+                    if (x < xMax) {
+                        x ++;
+                    } else {
+                        print("Wall reached");
+                    }
+                    break;
+                case BACK:
+                    if (x > 0) {
+                        x --;
+                    } else {
+                        print("Wall reached");
+                    }
+                    break;
+                case LEFT:
+                    if (y > 0) {
+                        y --;
+                    } else {
+                        print("Wall reached");
+                    }
+                    break;
+                case RIGHT:
+                    if (y < yMax) {
+                        y ++;
+                    } else {
+                        print("Wall reached");
+                    }
+                    break;
+            }
+
+            print(String.format("Su posición es [%s-%s]", x, y));
+
+            movement = Movement.promptChoice();
+        }
+
+    }
+
     private static long randomizePositiveLong(int digits) { // todo llevar a NumberUtils
         final Random random = new Random();
         final long randomLong = random.nextLong();
@@ -436,6 +492,29 @@ public class Class2ExercisesLoopsAndText {
             }
 
             return null;
+        }
+    }
+
+    private enum Movement {
+        FORWARD, BACK, LEFT, RIGHT, END;
+
+        public static Movement promptChoice() {
+            return fromChoice(intInput("Ingrese un movimiento: 1 = adelante, 2 = atrás, 3 = izquierda, 4 = derecha, cualquier otro = terminar"));
+        }
+
+        public static Movement fromChoice(int choice) {
+            switch (choice) {
+                case 1:
+                    return FORWARD;
+                case 2:
+                    return BACK;
+                case 3:
+                    return LEFT;
+                case 4:
+                    return RIGHT;
+                default:
+                    return END;
+            }
         }
     }
 
