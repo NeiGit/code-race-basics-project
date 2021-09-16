@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 import static util.IOUtil.*;
 import static util.NumberUtil.isEven;
@@ -30,6 +31,7 @@ public class Class2ExercisesLoopsAndText {
         exercises.addDelayedItem("Ejercicio 13", Class2ExercisesLoopsAndText::exercise13);
 
         exercises.addDelayedItem("Ejercicio 15", Class2ExercisesLoopsAndText::exercise15);
+        exercises.addDelayedItem("Ejercicio 16", Class2ExercisesLoopsAndText::exercise16);
 
         exercises.addDelayedItem("Ejercicio 17", Class2ExercisesLoopsAndText::exercise17);
         exercises.addDelayedItem("Ejercicio 18", Class2ExercisesLoopsAndText::exercise18);
@@ -53,14 +55,10 @@ public class Class2ExercisesLoopsAndText {
 
     /*2- Ingresar un número. Mostrar todos los múltiplos de 2 anteriores a ese número.*/
     public static void exercise2() {
-        final int num = intInput("Ingrese un número entero");
+        final int num = intInput("Ingrese un número entero", i -> i > 0);
 
-        if (num < 0) {
-            print("El número ingresado es negativo");
-        } else {
-            for (int i = 2; i <= num; i += 2) {
-                print(i);
-            }
+        for (int i = 2; i <= num; i += 2) {
+            print(i);
         }
     }
 
@@ -130,18 +128,14 @@ public class Class2ExercisesLoopsAndText {
     // Mostrar la cantidad de ocurrencias de esa letra ignorando mayúsculas/minúsculas.
     public static void exercise7() {
         final String text = stringInput("Ingrese un texto").toLowerCase();
-        final String character = stringInput("Ingrese una letra").toLowerCase();
+        final String character = stringInput("Ingrese una letra", s -> s.length() == 1).toLowerCase();
 
-        if (character.length() != 1) {
-            print("Ingreso inválido");
-        } else {
-            final int originalLength = text.length();
-            final int lengthWithoutCharacter = text.replace(character, "").length();
+        final int originalLength = text.length();
+        final int lengthWithoutCharacter = text.replace(character, "").length();
 
-            final int occurrencesOfCharacter = originalLength - lengthWithoutCharacter;
+        final int occurrencesOfCharacter = originalLength - lengthWithoutCharacter;
 
-            print(occurrencesOfCharacter);
-        }
+        print(occurrencesOfCharacter);
     }
 
 /*    8- Ingresar un texto. Devolver un texto conteniendo las vocales primero y luego las consonantes.
@@ -154,7 +148,7 @@ public class Class2ExercisesLoopsAndText {
         String vocals = "";
         String consonants = "";
         for (char c : textWithoutSpaces.toCharArray()) {
-            if (isConsonant(c)) { // todo refactor isVocals & isConsonant
+            if (isConsonant(c)) {
                 consonants += c;
             } else if (isVocal(c)) {
                 vocals += c;
@@ -180,12 +174,7 @@ public class Class2ExercisesLoopsAndText {
 
         String result = "";
         for(int i = 0; i < num; i ++) {
-            String c = "";
-            while(c.length() != 1) {
-                c = stringInput("Ingrese un caracter");
-            }
-
-            result += c;
+            result += stringInput("Ingrese un caracter", s -> s.length() == 1);
         }
 
         print(result);
@@ -195,46 +184,29 @@ public class Class2ExercisesLoopsAndText {
     Mostrar la secuencia de números ordenada de forma ascendente. Utilizar tipo de dato double.
     Ej.: entrada = 874396, salida = 346789*/
     public static void exercise11() {
-        final int num = intInput("Ingrese un número entero de 6 cifras", i -> String.valueOf(i).length() == 6); // todo validation Predicate, functional interface
-
-        final List<String> digitStringList = new ArrayList<>(Arrays.asList(String.valueOf(num).split("")));
-
-        final List<Integer> digits = new ArrayList<>(); //todo map!
-        for (String digitString : digitStringList) {
-            digits.add(Integer.parseInt(digitString));
-        }
-
-        final List<Integer> digitsSortedAsc = sortIntegerListAscending(digits);
-
-        String digitsSortedAscJoined = "";
-        for (Integer digitSortedAsc : digitsSortedAsc) { //todo map!
-            digitsSortedAscJoined += digitSortedAsc;
-        }
-
-        print(digitsSortedAscJoined);
+        inputAndSortNumbersAscending(6);
     }
 
     // 12- Idem 11- indicando primero la cantidad de cifras a ingresar. Mínimo 2 cifras Máximo 8
     // ¿Se puede reutilizar la solución del ej 11?
-    public static void exercise12() { // todo es igual al 11!!!
-        final int size = intInput("Ingrese un número entero de 6 cifras", i -> i >= 2 && i <= 8);
-        final int num = intInput("Ingrese un número entero de " + size + " cifras", i -> String.valueOf(i).length() == size);
+    public static void exercise12() {
+        final int digits = intInput("Ingrese un número entero entre 2 y 8", i -> i >= 2 && i <= 8);
 
-        final List<String> digitStringList = new ArrayList<>(Arrays.asList(String.valueOf(num).split(""))); // todo refactor
+        inputAndSortNumbersAscending(digits);
+    }
 
-        final List<Integer> digits = new ArrayList<>(); //todo map!
-        for (String digitString : digitStringList) {
-            digits.add(Integer.parseInt(digitString));
-        }
+    public static void inputAndSortNumbersAscending(int digits) {
+        final int num = intInput(String.format("Ingrese un número entero de %s cifras", digits), i -> String.valueOf(i).length() == digits);
 
-        final List<Integer> digitsSortedAsc = sortIntegerListAscending(digits);
+        final List<Integer> digitList =
+                new ArrayList<>(Arrays.asList(String.valueOf(num).split("")))
+                        .stream()
+                        .map(Integer::parseInt)
+                        .collect(Collectors.toList());
 
-        String digitsSortedAscJoined = "";
-        for (Integer digitSortedAsc : digitsSortedAsc) { //todo map!
-            digitsSortedAscJoined += digitSortedAsc;
-        }
+        final List<Integer> digitsSortedAsc = sortIntegerListAscending(digitList);
 
-        print(digitsSortedAscJoined);
+        print(digitsSortedAsc.stream().map(String::valueOf).collect(Collectors.joining()));
     }
 
 /*  13- Ingresar un número entero de 3 cifras. Mostrar los siguientes 3 números de 3 cifras que contengan esas 3 cifras.
@@ -297,33 +269,56 @@ public class Class2ExercisesLoopsAndText {
     aaaaa-
     aaaaaa*/
     public static void exercise15() {
+        buildPicture(((characters, dashes, character) ->
+                print(buildNTimesCharacter(characters, character) + buildNTimesCharacter(dashes, "-"))));
+    }
+
+    /*    16- Ingresar un número del 1 al 10 y un caracter. Imprimir una pirámide con ese caracter.
+    Por ejemplo
+    Entrada: 6 y 'a'
+    Salida:
+    -----aa-----
+    ----aaaa----
+    ---aaaaaa---
+    --aaaaaaaa--
+    -aaaaaaaaaa-
+    aaaaaaaaaaa
+    ¿Se puede reutilizar la solución del ejercicio anterior?
+    */
+    public static void exercise16() {
+        buildPicture((characters, dashes, character) ->
+                print(buildNTimesCharacter(dashes, "-")
+                    + buildNTimesCharacter(characters, character)
+                    + buildNTimesCharacter(characters, character)
+                    + buildNTimesCharacter(dashes, "-")));
+    }
+
+    public static void buildPicture(TriConsumer consumer) {
         final int steps = intInput("Ingrese un número del 1 al 10", i -> i > 1 && i <= 10);
         final String character = stringInput("Ingrese un caracter", s -> s.length() == 1);
 
-        for (int step = 1; step <= steps; step++) { //todo explicar que acá uso el index por su valor e inicia en 1
+        for (int step = 1; step <= steps; step++) {
             final int dashes = steps - step;
             final int characters = step;
 
-            String result = "";
-
-            for (int i = 0; i < characters; i++) { //todo explicar que acá sólo quiero iterar n veces no me importa el valor
-                result += character;
-            }
-
-            for (int i = 0; i < dashes; i++) {
-                result += "-";
-            }
-
-            print(result);
+            consumer.consume(characters, dashes, character);
         }
     }
 
-/*    16- Ingresar un número del 1 al 10 y un caracter. Imprimir una pirámide con ese caracter.
-    Por ejemplo
-    Entrada: 6 y 'a'
-    //todo buildStringWithCharacterNTimes()
-    */
+    @FunctionalInterface
+    private interface TriConsumer {
+        void consume(int characters, int dashes, String character);
+    }
 
+    public static String buildNTimesCharacter(int n, String character) {
+        String nTimesCharacter = "";
+
+        for (int i = 0; i < n; i++) {
+            nTimesCharacter += character;
+        }
+
+        return nTimesCharacter;
+    }
 
 /*    17- Ingresar un número entero del 1 al 19.
     Randomizar un número entero positivo (tipo de dato long) cuya cantidad de cifras sea el número ingresado.*/
@@ -437,41 +432,34 @@ public class Class2ExercisesLoopsAndText {
     }
 
 
-    private static boolean isConsonant(char value) { // todo refactor
+    private static boolean isConsonant(char value) {
         final char[] consonants = new char[] {'b', 'c', 'd', 'f', 'g', 'h', 'j', 'k', 'l',
         'm', 'n', 'ñ', 'p', 'q', 'r', 's', 't', 'v', 'w', 'x', 'y', 'z'};
 
-        final String charToLowerCase = String.valueOf(value).toLowerCase();
-
-        final char c = charToLowerCase.toCharArray()[0];
-
-        boolean isConsonant = false;
-        int index = 0;
-
-        while(!isConsonant && index < consonants.length) {
-            isConsonant = c == consonants[index];
-            index ++;
-        }
-
-        return isConsonant;
+        return isInArray(value, consonants);
     }
 
     private static boolean isVocal(char value) {
-        final char[] consonants = new char[] {'a', 'e', 'i', 'o', 'u'};
+        final char[] vocals = new char[] {'a', 'e', 'i', 'o', 'u'};
+
+        return isInArray(value, vocals);
+    }
+
+    private static boolean isInArray(char value, char[] array) {
+        boolean isInArray = false;
 
         final String charToLowerCase = String.valueOf(value).toLowerCase();
 
         final char c = charToLowerCase.toCharArray()[0];
 
-        boolean isConsonant = false;
         int index = 0;
 
-        while(!isConsonant && index < consonants.length) {
-            isConsonant = c == consonants[index];
+        while(!isInArray && index < array.length) {
+            isInArray = c == array[index];
             index ++;
         }
 
-        return isConsonant;
+        return isInArray;
     }
 
     private enum Operation {

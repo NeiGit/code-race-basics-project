@@ -24,12 +24,12 @@ public class NumberUtil {
         return sortIntegerList(numbers, SortType.DESC);
     }
 
-    public static List<Integer> sortIntegerList(List<Integer> numbers1, SortType sortType) {
+    private static List<Integer> sortIntegerList(List<Integer> numbers, SortType sortType) {
         final List<Integer> numbersOrdered = new ArrayList<>();
-        numbersOrdered.add(numbers1.get(0));
+        numbersOrdered.add(numbers.get(0));
 
-        for(int i = 1; i < numbers1.size(); i ++) {
-            int candidate = numbers1.get(i);
+        for(int i = 1; i < numbers.size(); i ++) {
+            int candidate = numbers.get(i);
 
             int index = 0;
             boolean found = false;
