@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
 import static util.IOUtil.*;
@@ -37,6 +38,7 @@ public class Class2ExercisesLoopsAndText {
         exercises.addDelayedItem("Ejercicio 17", Class2ExercisesLoopsAndText::exercise17);
         exercises.addDelayedItem("Ejercicio 18", Class2ExercisesLoopsAndText::exercise18);
         exercises.addDelayedItem("Ejercicio 19", Class2ExercisesLoopsAndText::exercise19);
+        exercises.addDelayedItem("Ejercicio 20", Class2ExercisesLoopsAndText::exercise20);
     }
 
     /*1- Ingresar un número. Mostrar todos los números hasta llegar a su opuesto.*/
@@ -197,17 +199,9 @@ public class Class2ExercisesLoopsAndText {
     }
 
     public static void inputAndSortNumbersAscending(int digits) {
-        final int num = intInput(String.format("Ingrese un número entero de %s cifras", digits), i -> String.valueOf(i).length() == digits);
+        final long num = intInput(String.format("Ingrese un número entero de %s cifras", digits), i -> String.valueOf(i).length() == digits);
 
-        final List<Integer> digitList =
-                new ArrayList<>(Arrays.asList(String.valueOf(num).split("")))
-                        .stream()
-                        .map(Integer::parseInt)
-                        .collect(Collectors.toList());
-
-        final List<Integer> digitsSortedAsc = sortIntegerListAscending(digitList);
-
-        print(digitsSortedAsc.stream().map(String::valueOf).collect(Collectors.joining()));
+        print(sortLongDigitsAscending(num));
     }
 
 /*  13- Ingresar un número entero de 3 cifras. Mostrar los siguientes 3 números de 3 cifras que contengan esas 3 cifras.
@@ -421,18 +415,81 @@ public class Class2ExercisesLoopsAndText {
         }
 
     }
+
     /*
     20- Juego: ordenar secuencias de números
     Se trata de un juego de 19 niveles.
     Termina cuando el usuario ingresa 'exit' o cuando resuelve el último nivel.
-    En el primer nivel se randomiza un número entero de 3 cifras positivo y se le pide al usuario que ingrese la secuencia en orden ascendente. Utilizar tipo de dato long.
+    En el primer nivel se randomiza un número entero de 3 cifras positivo y se le pide al usuario que ingrese la secuencia en orden ascendente.
+    Utilizar tipo de dato long.
     Por ejemplo, si el programa muestra "839" el usuario tiene que ingresar "389".
-    En cada nivel se suma una cifra al desafío. Cada nivel superado suma el doble de puntos, siendo 100 el puntaje del nivel 1. Se puede fallar un máximo de 3 veces, en caso de superar esa cantidad finalizar el juego mostrando “Game over”.
+    En cada nivel se suma una cifra al desafío. Cada nivel superado suma el doble de puntos, siendo 100 el puntaje del nivel 1.
+    Se puede fallar un máximo de 3 veces, en caso de superar esa cantidad finalizar el juego mostrando “Game over”.
     Mostrar en cada paso el nivel en el que se está, el puntaje ganado del nivel y el puntaje final.
     Al finalizar indicar el puntaje final.
 
     Extra -> si el usuario gana el juego, ¿puede volver a jugar manteniendo su score?
      */
+
+    public static void exercise20() {
+        final BiFunction<Integer, Long, String> promptChoice = (level, challenge) ->
+                stringInput(String.format("Nivel %s - Ordene este numero de forma ascendente o 'exit' para terminar: %s", level, challenge));
+
+        final String exit = "exit";
+
+        int level = 1;
+        int challengeDigits = 3;
+        int levelScore = 100;
+        int lives = 3;
+        int userScore = 0;
+
+        long challenge = randomizePositiveLong(challengeDigits);
+
+        String userInput = promptChoice.apply(level, challenge);
+
+        while (!userInput.equalsIgnoreCase(exit) && level <= 19 && lives > 0) {
+            final String resolvedChallenge = sortLongDigitsAscending(challenge);
+
+            if (userInput.equals(resolvedChallenge)) {
+                print(String.format("¡Muy bien! Has ganado %s puntos", levelScore));
+                userScore += levelScore;
+
+                print(String.format("Puntaje acumulado: %s puntos", userScore));
+
+                level ++;
+                levelScore *= 2;
+                challengeDigits ++;
+                challenge = randomizePositiveLong(challengeDigits);
+            } else {
+                lives --;
+                print(String.format("¡Mal! Te quedan %s intentos", lives));
+            }
+
+            if (lives > 0) {
+                userInput = promptChoice.apply(level, challenge);
+            }
+        }
+
+        if (level > 19) {
+            print("¡Felicitaciones, ha ganado el juego!");
+        } else if (lives == 0) {
+            print("Game over");
+        }
+
+        print(String.format("Último nivel ganado: %s - Puntaje final: %s", level - 1 > 0 ? level - 1 : "-", userScore));
+    }
+
+    private static String sortLongDigitsAscending(long challenge) {
+        final List<Integer> digitList = new ArrayList<>(Arrays.asList(String.valueOf(challenge).split("")))
+                .stream()
+                .map(Integer::parseInt)
+                .collect(Collectors.toList());
+
+        final List<Integer> integersSorted = sortIntegerListAscending(digitList);
+
+        return integersSorted.stream().map(String::valueOf).collect(Collectors.joining());
+    }
+
 
     private static long randomizePositiveLong(int digits) {
         final Random random = new Random();
