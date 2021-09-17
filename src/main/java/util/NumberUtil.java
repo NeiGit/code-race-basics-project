@@ -1,7 +1,10 @@
 package util;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.function.BiFunction;
 
 public class NumberUtil {
     public static boolean isPositive(int num) {
@@ -25,6 +28,10 @@ public class NumberUtil {
     }
 
     private static List<Integer> sortIntegerList(List<Integer> numbers, SortType sortType) {
+        final Map<SortType, BiFunction<Integer, Integer, Boolean>> sortMap = new HashMap<>();
+        sortMap.put(SortType.ASC, (i1, i2) -> i1 <= i2);
+        sortMap.put(SortType.DESC, (i1, i2) -> i1 >= i2);
+
         final List<Integer> numbersOrdered = new ArrayList<>();
         numbersOrdered.add(numbers.get(0));
 
@@ -35,12 +42,8 @@ public class NumberUtil {
             boolean found = false;
 
             while(!found && index < numbersOrdered.size()) {
-
-                if (sortType == SortType.ASC) {
-                    found = candidate <= numbersOrdered.get(index);
-                } else if (sortType == SortType.DESC) {
-                    found = candidate >= numbersOrdered.get(index);
-                }
+                found = sortMap.get(sortType)
+                        .apply(candidate, numbersOrdered.get(index));
 
                 if (!found) {
                     index ++;

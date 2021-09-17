@@ -3,6 +3,8 @@ package ejercicios;
 import menu.Menu;
 
 import java.util.*;
+import java.util.function.BiFunction;
+import java.util.stream.Collectors;
 
 import static util.IOUtil.*;
 import static util.NumberUtil.sortIntegerListAscending;
@@ -20,6 +22,7 @@ public class Class2ExercisesCollections {
         exercises.addDelayedItem("Ejercicio 5", Class2ExercisesCollections::exercise5);
         exercises.addDelayedItem("Ejercicio 6", Class2ExercisesCollections::exercise6);
         exercises.addDelayedItem("Ejercicio 7", Class2ExercisesCollections::exercise7);
+        exercises.addDelayedItem("Ejercicio 8", Class2ExercisesCollections::exercise8);
     }
 
     // 1 - Cargar dos listas de 5 personas indicando su nombre.
@@ -98,7 +101,7 @@ public class Class2ExercisesCollections {
             podiumMap.put(Podium.SUB_CHAMPION, teamByScore.get(sortedScores.get(1)));
             podiumMap.put(Podium.THIRD_PLACE, teamByScore.get(sortedScores.get(2)));
 
-            podiumMap.forEach((k, v) -> print(String.format("%s-%s", k, v))); //todo forEach
+            podiumMap.forEach((k, v) -> print(String.format("%s-%s", k, v)));
         }
     }
 
@@ -205,6 +208,18 @@ public class Class2ExercisesCollections {
         }
     }
 
+    /*6 - Sin ingreso de usuario. Armar e imprimir un mapa con las siete
+    escalas/modos que se forman con las notas de la escala mayor de DO:
+    JONICO -> "do", "re", "mi", "fa", "sol", "la", "si".
+    DORICO -> "re", "mi", "fa", "sol", "la", "si", "do"
+    FRIGIO -> "mi", "fa", "sol", "la"....
+    LIDIO -> "fa", "sol", "la"...
+    MIXOLIDIO -> "sol"...
+    EOLICO -> "la" ...
+    LOCRIO -> "si" ...
+    ¿Es necesario cargar la lista de notas para cada key del mapa?
+    ¿Y si se pide hacer lo mismo con las notas de la escala mayor de sol?
+        "sol", "la", "si", "do", "re", "mi", "fa#"*/
     public static void exercise6() {
         final Map<Scale, Integer> offsetByScale = new HashMap<>();
         offsetByScale.put(Scale.JONICO, 0);
@@ -220,7 +235,7 @@ public class Class2ExercisesCollections {
             int loops = 0;
             int index = offset;
 
-            final Note[] notes = Note.values();
+            final Notes[] notes = Notes.values();
             final int notesLength = notes.length;
 
             while(loops < notesLength) {
@@ -247,6 +262,7 @@ public class Class2ExercisesCollections {
     Por ejemplo 123 -> mostrar UNO-DOS-TRES.
     ¿Se puede reutilizar la solución para hacer el camino inverso? Ingresar UNO-DOS-TRES -> mostrar 123 */
     public static void exercise7() {
+        // part 1
         Map<Character, Number> numberNamesByValue = new HashMap<>();
         numberNamesByValue.put('1', Number.ONE);
         numberNamesByValue.put('2', Number.TWO);
@@ -273,14 +289,16 @@ public class Class2ExercisesCollections {
 
         print(numNamesJoined);
 
+        // part 2
         final String stringNums = stringInput("Ingrese secuencia de numeros separada por guión");
 
-        final String[] stringNumsArray = stringNums.split("-");
+        final List<Number> listOfNumbers = Arrays.stream(stringNums.split("-"))
+                .map(Number::fromString)
+                .collect(Collectors.toList());
 
-        String numCharsJoined = "";
-        for (String s : stringNumsArray) { // todo map!!
-            final Number number = Number.fromString(s);
+        final List<String> numCharsJoined = new ArrayList<>();
 
+        listOfNumbers.forEach(number -> {
             Character numChar = null;
             int index = 1;
 
@@ -294,12 +312,66 @@ public class Class2ExercisesCollections {
                 index ++;
             }
 
-            numCharsJoined += numChar;
-        }
+            numCharsJoined.add(String.valueOf(numChar));
+        });
 
-        print(numCharsJoined);
+        print(String.join("", numCharsJoined));
     }
 
+    /*Para enfermitos….
+    8 - Se puede resolver la Calculadora sin usar if para las operaciones?
+    Investigar interfaz Runnable () -> o BiConsumer() o BiFunction()*/
+
+    /*    9. Calculadora:
+    Ingresar un texto: "sum", "subtract", "multiply", "divide", "percentage".
+    Ingresar dos números y mostrar por pantalla el resultado de la operación.
+    Mostrar "error" si la operación es inválida o si se divide por 0.*/
+
+    private enum CalculatorOperation {
+        SUM, SUBTRACT, MULTIPLY, DIVIDE, PERCENTAGE;
+
+        public static CalculatorOperation fromString(String value) {
+            return Arrays.stream(CalculatorOperation.values())
+                    .filter(calculatorOperation -> calculatorOperation.toString().equalsIgnoreCase(value))
+                    .findFirst()
+                    .orElse(null);
+        }
+    }
+
+    public static void exercise8() {
+        final Map<CalculatorOperation, BiFunction<Double, Double, Double>> operations = new HashMap<>();
+        operations.put(CalculatorOperation.SUM, (n1, n2) -> n1 + n2);
+        operations.put(CalculatorOperation.SUBTRACT, (n1, n2) -> n1 - n2);
+        operations.put(CalculatorOperation.MULTIPLY, (n1, n2) -> n1 * n2);
+        operations.put(CalculatorOperation.DIVIDE, (n1, n2) -> n1 / n2);
+        operations.put(CalculatorOperation.PERCENTAGE, (n1, n2) -> n1 * (n2 / 100));
+
+        final CalculatorOperation operation =
+                CalculatorOperation.fromString(stringInput("Ingrese una operación"));
+
+        // validate operation
+        if (operation == null) {
+            print("error");
+            return;
+        }
+
+        final double num1 = doubleInput("Ingrese un número");
+        final double num2 = doubleInput("Ingrese otro número");
+
+        //validate divide by zero
+        if (operation == CalculatorOperation.DIVIDE && num2 == 0) {
+            print("error");
+            return;
+        }
+
+        //validate negative percentage
+        if (operation == CalculatorOperation.PERCENTAGE && num2 < 0) {
+            print("error");
+            return;
+        }
+
+        print(operations.get(operation).apply(num1, num2));
+    }
 
 
     private static List<String> createListOfNames(int size, String listName) {
@@ -340,7 +412,7 @@ public class Class2ExercisesCollections {
         // other
         BROWN;
 
-        public static Color fromString(String value) { // todo enum factory method
+        public static Color fromString(String value) {
             Color color = null;
             int index = 0;
 
@@ -360,7 +432,7 @@ public class Class2ExercisesCollections {
         }
     }
 
-    private enum Note {
+    private enum Notes {
         DO, RE, MI, FA, SOL, LA, SI;
     }
 

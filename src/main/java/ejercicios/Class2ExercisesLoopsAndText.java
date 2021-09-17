@@ -419,6 +419,18 @@ public class Class2ExercisesLoopsAndText {
         }
 
     }
+    /*
+    20- Juego: ordenar secuencias de números
+    Se trata de un juego de 19 niveles.
+    Termina cuando el usuario ingresa 'exit' o cuando resuelve el último nivel.
+    En el primer nivel se randomiza un número entero de 3 cifras positivo y se le pide al usuario que ingrese la secuencia en orden ascendente. Utilizar tipo de dato long.
+    Por ejemplo, si el programa muestra "839" el usuario tiene que ingresar "389".
+    En cada nivel se suma una cifra al desafío. Cada nivel superado suma el doble de puntos, siendo 100 el puntaje del nivel 1. Se puede fallar un máximo de 3 veces, en caso de superar esa cantidad finalizar el juego mostrando “Game over”.
+    Mostrar en cada paso el nivel en el que se está, el puntaje ganado del nivel y el puntaje final.
+    Al finalizar indicar el puntaje final.
+
+    Extra -> si el usuario gana el juego, ¿puede volver a jugar manteniendo su score?
+     */
 
     private static long randomizePositiveLong(int digits) { // todo llevar a NumberUtils
         final Random random = new Random();
