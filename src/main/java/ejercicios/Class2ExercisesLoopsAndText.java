@@ -1,5 +1,6 @@
 package ejercicios;
 
+import menu.Calculator;
 import menu.Menu;
 
 import java.util.ArrayList;
@@ -212,12 +213,12 @@ public class Class2ExercisesLoopsAndText {
 /*  13- Ingresar un número entero de 3 cifras. Mostrar los siguientes 3 números de 3 cifras que contengan esas 3 cifras.
     En caso de llegar al máximo, empezar de nuevo.
     Ej.: entrada 312 - salida: 321, 123, 132*/
-    public static void exercise13() { // TODO work in progress....
+    public static void exercise13() {
         final int num = intInput("Ingrese un número entero de 3 cifras", i -> String.valueOf(i).length() == 3);
 
-        final List<String> digitStringList = new ArrayList<>(Arrays.asList(String.valueOf(num).split(""))); // todo refactor
+        final List<String> digitStringList = new ArrayList<>(Arrays.asList(String.valueOf(num).split("")));
 
-        final List<Integer> digits = new ArrayList<>(); //todo map!
+        final List<Integer> digits = new ArrayList<>();
         for (String digitString : digitStringList) {
             digits.add(Integer.parseInt(digitString));
         }
@@ -246,7 +247,7 @@ public class Class2ExercisesLoopsAndText {
             }
 
             String nextNumber = "";
-            for (Integer digitSortedAsc : nextNumberDigits) { //todo map!
+            for (Integer digitSortedAsc : nextNumberDigits) {
                 nextNumber += digitSortedAsc;
             }
 
@@ -339,16 +340,17 @@ public class Class2ExercisesLoopsAndText {
     public static void exercise18() {
         double balance = doubleInput("Ingrese un balance inicial de billetera");
 
-        Operation operation = Operation.promptChoice();
+        WalletOperation walletOperation = WalletOperation.promptChoice();
 
-        while (operation != Operation.END) { // todo explicar doWhile
-            if (operation == Operation.DEPOSIT) {
+        while (walletOperation != WalletOperation.END) {
+            if (walletOperation == WalletOperation.DEPOSIT) {
                 final double depositAmount = doubleInput("Ingrese monto a depositar", d -> d > 0);
+                final int tax = (int) Calculator.calculate(depositAmount, 30, Calculator.CalculatorOperation.PERCENTAGE);
 
-                balance += depositAmount;
+                balance += (depositAmount - tax);
                 print(String.format("Se han depositado exitosamente $%s", depositAmount));
 
-            } else if (operation == Operation.EXTRACTION) {
+            } else if (walletOperation == WalletOperation.EXTRACTION) {
                 final double extractionAmount = doubleInput("Ingrese monto a extraer", d -> d > 0);
 
                 if (extractionAmount <= balance) {
@@ -361,7 +363,7 @@ public class Class2ExercisesLoopsAndText {
 
             print(String.format("Balance: $%s", balance));
 
-            operation = Operation.promptChoice();
+            walletOperation = WalletOperation.promptChoice();
         }
     }
 
@@ -432,7 +434,7 @@ public class Class2ExercisesLoopsAndText {
     Extra -> si el usuario gana el juego, ¿puede volver a jugar manteniendo su score?
      */
 
-    private static long randomizePositiveLong(int digits) { // todo llevar a NumberUtils
+    private static long randomizePositiveLong(int digits) {
         final Random random = new Random();
         final long randomLong = random.nextLong();
 
@@ -474,14 +476,14 @@ public class Class2ExercisesLoopsAndText {
         return isInArray;
     }
 
-    private enum Operation {
+    private enum WalletOperation {
         DEPOSIT, EXTRACTION, END;
 
-        public static Operation promptChoice() {
+        public static WalletOperation promptChoice() {
             return fromChoice(intInput("Ingrese una operación: 1 = ingreso, 2 = extracción, 3 = terminar", i -> i >= 1 && i <= 3));
         }
 
-        public static Operation fromChoice(int choice) {
+        public static WalletOperation fromChoice(int choice) {
             switch (choice) {
                 case 1:
                     return DEPOSIT;

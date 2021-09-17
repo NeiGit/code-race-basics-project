@@ -3,9 +3,10 @@ package ejercicios;
 import menu.Menu;
 
 import java.util.*;
-import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
+import static menu.Calculator.CalculatorOperation;
+import static menu.Calculator.calculate;
 import static util.IOUtil.*;
 import static util.NumberUtil.sortIntegerListAscending;
 import static util.NumberUtil.sortIntegerListDescending;
@@ -327,25 +328,7 @@ public class Class2ExercisesCollections {
     Ingresar dos números y mostrar por pantalla el resultado de la operación.
     Mostrar "error" si la operación es inválida o si se divide por 0.*/
 
-    private enum CalculatorOperation {
-        SUM, SUBTRACT, MULTIPLY, DIVIDE, PERCENTAGE;
-
-        public static CalculatorOperation fromString(String value) {
-            return Arrays.stream(CalculatorOperation.values())
-                    .filter(calculatorOperation -> calculatorOperation.toString().equalsIgnoreCase(value))
-                    .findFirst()
-                    .orElse(null);
-        }
-    }
-
     public static void exercise8() {
-        final Map<CalculatorOperation, BiFunction<Double, Double, Double>> operations = new HashMap<>();
-        operations.put(CalculatorOperation.SUM, (n1, n2) -> n1 + n2);
-        operations.put(CalculatorOperation.SUBTRACT, (n1, n2) -> n1 - n2);
-        operations.put(CalculatorOperation.MULTIPLY, (n1, n2) -> n1 * n2);
-        operations.put(CalculatorOperation.DIVIDE, (n1, n2) -> n1 / n2);
-        operations.put(CalculatorOperation.PERCENTAGE, (n1, n2) -> n1 * (n2 / 100));
-
         final CalculatorOperation operation =
                 CalculatorOperation.fromString(stringInput("Ingrese una operación"));
 
@@ -370,7 +353,7 @@ public class Class2ExercisesCollections {
             return;
         }
 
-        print(operations.get(operation).apply(num1, num2));
+        print(calculate(num1, num2, operation));
     }
 
 
