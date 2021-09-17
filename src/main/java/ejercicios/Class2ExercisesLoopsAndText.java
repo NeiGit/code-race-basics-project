@@ -3,16 +3,12 @@ package ejercicios;
 import menu.Calculator;
 import menu.Menu;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
 import static util.IOUtil.*;
-import static util.NumberUtil.isEven;
-import static util.NumberUtil.sortIntegerListAscending;
+import static util.NumberUtil.*;
 
 public class Class2ExercisesLoopsAndText {
     public static void subscribeToMenu(Menu mainMenu) {
@@ -210,46 +206,95 @@ public class Class2ExercisesLoopsAndText {
     public static void exercise13() {
         final int num = intInput("Ingrese un número entero de 3 cifras", i -> String.valueOf(i).length() == 3);
 
-        final List<String> digitStringList = new ArrayList<>(Arrays.asList(String.valueOf(num).split("")));
+        final List<Integer> digitList = Arrays.stream(String.valueOf(num).split(""))
+                .map(Integer::parseInt)
+                .collect(Collectors.toList());
 
-        final List<Integer> digits = new ArrayList<>();
-        for (String digitString : digitStringList) {
-            digits.add(Integer.parseInt(digitString));
-        }
+        final List<Integer> nextOccurrenceCandidateDigits = new ArrayList<>(digitList);
 
-        int occurrences = 0;
-        List<Integer> lastOccurrenceDigits = new ArrayList<>(digits);
+        final List<Integer> occurrences = new ArrayList<>();
+        int lastOccurrence;
 
-        while(occurrences < 3) {
-            List<Integer> nextNumberDigits = new ArrayList<>(lastOccurrenceDigits);
+        // check if is the greatest by sorting desc
+        final List<Integer> digitsListSortedDescending = sortIntegerListDescending(digitList);
+        final int greatestOccurrence = getIntFromIntegerList(digitsListSortedDescending);
 
-            boolean changed = false;
-            int index = 0;
+        // check if is the smallest by sorting asc
+        final List<Integer> digitsListSortedAscending = sortIntegerListAscending(digitList);
+        final int smallestOccurrence = getIntFromIntegerList(digitsListSortedAscending);
 
-            final List<Integer> integers = sortIntegerListAscending(lastOccurrenceDigits);
+        final int lastIndex = nextOccurrenceCandidateDigits.size() - 1;
 
-            while(!changed && index < nextNumberDigits.size()) {
-                final int min = integers.get(index);
-                if (min < (lastOccurrenceDigits.get(index))) {
-                    nextNumberDigits.add(index, min);
-                    nextNumberDigits.remove((Integer) min);
-                    changed = true;
-                    lastOccurrenceDigits = nextNumberDigits;
-                } else {
-                    index ++;
+        while (occurrences.size() < 3) {
+            final int nextOccurrenceCandidate = getIntFromIntegerList(nextOccurrenceCandidateDigits);
+            if (nextOccurrenceCandidate == greatestOccurrence) {
+                lastOccurrence = greatestOccurrence;
+                occurrences.add(lastOccurrence);
+            } else if (nextOccurrenceCandidate == smallestOccurrence) {
+                // swap last two digits. For example, 1234 -> 1243.
+
+                final int lastDigit = nextOccurrenceCandidateDigits.get(lastIndex);
+                final int preLastDigit = nextOccurrenceCandidateDigits.get(lastIndex - 1);
+
+                nextOccurrenceCandidateDigits.remove(lastIndex);
+                nextOccurrenceCandidateDigits.add(lastIndex, preLastDigit);
+
+                nextOccurrenceCandidateDigits.remove(lastIndex - 1);
+                nextOccurrenceCandidateDigits.add(lastIndex - 1, lastDigit);
+
+                lastOccurrence = getIntFromIntegerList(nextOccurrenceCandidateDigits);
+
+            } else {
+                Integer smallerFromEnd = null;
+                int smallerFromEndIndex = lastIndex;
+                while (smallerFromEnd == null && smallerFromEndIndex >= 1) {
+                    final int firstFromRight = nextOccurrenceCandidateDigits.get(smallerFromEndIndex);
+                    final int secondFromRight = nextOccurrenceCandidateDigits.get(smallerFromEndIndex - 1);
+
+                    if (secondFromRight < firstFromRight) {
+                        smallerFromEnd = secondFromRight;
+                    }
+
+                    smallerFromEndIndex --;
                 }
+
+                final List<Integer> intsRightToSmallerFromEnd = nextOccurrenceCandidateDigits.subList(smallerFromEndIndex + 1, lastIndex + 1);
+                int minIntRightToSmallerFromEnd = Integer.MAX_VALUE;
+                int minIntRightToSmallerFromEndIndex = 0; // todo acá tengo que obtener el indice pero de la otra lista
+
+                for (int i = 0; i < intsRightToSmallerFromEnd.size(); i ++) {
+                    final int candidate = intsRightToSmallerFromEnd.get(i);
+                    if (candidate < minIntRightToSmallerFromEnd) {
+                        minIntRightToSmallerFromEnd = candidate;
+                        minIntRightToSmallerFromEndIndex = i;
+                    }
+                }
+
+                nextOccurrenceCandidateDigits.remove(smallerFromEndIndex);
+                nextOccurrenceCandidateDigits.add(smallerFromEndIndex, minIntRightToSmallerFromEnd);
+
+                nextOccurrenceCandidateDigits.remove(minIntRightToSmallerFromEndIndex);
+                nextOccurrenceCandidateDigits.add(minIntRightToSmallerFromEndIndex, smallerFromEnd);
+
+                final List<Integer> nextCandidateRightSideAscending = new ArrayList<>(
+                        sortIntegerListAscending(nextOccurrenceCandidateDigits.subList(smallerFromEndIndex + 1, lastIndex + 1)));
+
+                List<Integer> nextCandidateLeftSide = new ArrayList<>(nextOccurrenceCandidateDigits.subList(0, smallerFromEndIndex));
+
+                nextOccurrenceCandidateDigits.clear();
+                nextOccurrenceCandidateDigits.addAll(nextCandidateLeftSide);
+                nextOccurrenceCandidateDigits.addAll(nextCandidateRightSideAscending);
+
+                lastOccurrence = getIntFromIntegerList(nextOccurrenceCandidateDigits);
             }
 
-            String nextNumber = "";
-            for (Integer digitSortedAsc : nextNumberDigits) {
-                nextNumber += digitSortedAsc;
-            }
-
-            print(nextNumber);
-
-            occurrences ++;
+            print(lastOccurrence);
+            occurrences.add(lastOccurrence);
         }
+    }
 
+    private static int getIntFromIntegerList(List<Integer> integerList) {
+        return Integer.parseInt(integerList.stream().map(String::valueOf).collect(Collectors.joining()));
     }
 
 /*    15- Ingresar un número del 1 al 10 y un caracter.
@@ -369,51 +414,75 @@ public class Class2ExercisesLoopsAndText {
     Nivel 3. Rectángulo. Ej.: ingreso 4 y 6, la habitación es de 4x6.*/
 
     public static void exercise19() {
-        final int xMax = 4;
-        final int yMax = 4;
+        final int xMax = intInput("Ingrese largo del recinto en metros", i -> i > 1);
+        final int yMax = intInput("Ingrese ancho del recinto en metros", i -> i > 1);
 
+        executeExercise19(xMax, yMax);
+    }
+
+    public static void executeExercise19(int xMax, int yMax) {
         int x = 0;
         int y = 0;
+
+        printPositionInRoom(xMax, yMax, x, y);
 
         Movement movement = Movement.promptChoice();
 
         while (movement != Movement.END) {
             switch (movement) {
                 case FORWARD:
-                    if (x < xMax) {
-                        x ++;
+                    if (y < xMax) {
+                        y ++;
                     } else {
                         print("Wall reached");
                     }
                     break;
                 case BACK:
-                    if (x > 0) {
-                        x --;
-                    } else {
-                        print("Wall reached");
-                    }
-                    break;
-                case LEFT:
                     if (y > 0) {
                         y --;
                     } else {
                         print("Wall reached");
                     }
                     break;
+                case LEFT:
+                    if (x > 0) {
+                        x --;
+                    } else {
+                        print("Wall reached");
+                    }
+                    break;
                 case RIGHT:
-                    if (y < yMax) {
-                        y ++;
+                    if (x < yMax) {
+                        x ++;
                     } else {
                         print("Wall reached");
                     }
                     break;
             }
 
-            print(String.format("Su posición es [%s-%s]", x, y));
+            printPositionInRoom(xMax, yMax, x, y);
 
             movement = Movement.promptChoice();
         }
+    }
 
+    private static void printPositionInRoom(int xMax, int yMax, int x, int y) {
+        final String BLANK = " ";
+        final String emptyPosition = "X" + BLANK;
+        final String playerPosition = "O" + BLANK;
+        for (int i = yMax; i >= 0; i --) {
+            if (i != y) {
+                print(buildNTimesCharacter(xMax, emptyPosition));
+            } else {
+                String lineWithPosition = "";
+
+                lineWithPosition += buildNTimesCharacter(x, emptyPosition);
+                lineWithPosition += playerPosition;
+                lineWithPosition += buildNTimesCharacter(xMax - x - 1, emptyPosition);
+
+                print(lineWithPosition);
+            }
+        }
     }
 
     /*
