@@ -204,8 +204,13 @@ public class Class2ExercisesLoopsAndText {
     En caso de llegar al máximo, empezar de nuevo.
     Ej.: entrada 312 - salida: 321, 123, 132*/
     public static void exercise13() {
-        final int num = intInput("Ingrese un número entero de 3 cifras", i -> String.valueOf(i).length() == 3);
+        final int num = intInput("Ingrese un número entero", i -> String.valueOf(i).length() <= 9);
+        final int occurrences = intInput("Ingrese cantidad de ocurrencias a mostrar", i -> i > 0);
 
+        showNextNOccurrencesOfNum(occurrences, num);
+    }
+
+    public static void showNextNOccurrencesOfNum(int n, int num) {
         final List<Integer> digitList = Arrays.stream(String.valueOf(num).split(""))
                 .map(Integer::parseInt)
                 .collect(Collectors.toList());
@@ -225,14 +230,18 @@ public class Class2ExercisesLoopsAndText {
 
         final int lastIndex = nextOccurrenceCandidateDigits.size() - 1;
 
-        while (occurrences.size() < 3) {
+        while (occurrences.size() < n) {
             final int nextOccurrenceCandidate = getIntFromIntegerList(nextOccurrenceCandidateDigits);
             if (nextOccurrenceCandidate == greatestOccurrence) {
-                lastOccurrence = greatestOccurrence;
+                lastOccurrence = smallestOccurrence;
                 occurrences.add(lastOccurrence);
+                nextOccurrenceCandidateDigits.clear();
+                nextOccurrenceCandidateDigits.addAll(Arrays.stream(String.valueOf(lastOccurrence).split(""))
+                        .map(Integer::parseInt)
+                        .collect(Collectors.toList()));
+
             } else if (nextOccurrenceCandidate == smallestOccurrence) {
                 // swap last two digits. For example, 1234 -> 1243.
-
                 final int lastDigit = nextOccurrenceCandidateDigits.get(lastIndex);
                 final int preLastDigit = nextOccurrenceCandidateDigits.get(lastIndex - 1);
 
@@ -258,12 +267,11 @@ public class Class2ExercisesLoopsAndText {
                     smallerFromEndIndex --;
                 }
 
-                final List<Integer> intsRightToSmallerFromEnd = nextOccurrenceCandidateDigits.subList(smallerFromEndIndex + 1, lastIndex + 1);
                 int minIntRightToSmallerFromEnd = Integer.MAX_VALUE;
-                int minIntRightToSmallerFromEndIndex = 0; // todo acá tengo que obtener el indice pero de la otra lista
+                int minIntRightToSmallerFromEndIndex = 0;
 
-                for (int i = 0; i < intsRightToSmallerFromEnd.size(); i ++) {
-                    final int candidate = intsRightToSmallerFromEnd.get(i);
+                for (int i = smallerFromEndIndex + 1; i < nextOccurrenceCandidateDigits.size(); i ++) {
+                    final int candidate = nextOccurrenceCandidateDigits.get(i);
                     if (candidate < minIntRightToSmallerFromEnd) {
                         minIntRightToSmallerFromEnd = candidate;
                         minIntRightToSmallerFromEndIndex = i;
@@ -279,7 +287,7 @@ public class Class2ExercisesLoopsAndText {
                 final List<Integer> nextCandidateRightSideAscending = new ArrayList<>(
                         sortIntegerListAscending(nextOccurrenceCandidateDigits.subList(smallerFromEndIndex + 1, lastIndex + 1)));
 
-                List<Integer> nextCandidateLeftSide = new ArrayList<>(nextOccurrenceCandidateDigits.subList(0, smallerFromEndIndex));
+                List<Integer> nextCandidateLeftSide = new ArrayList<>(nextOccurrenceCandidateDigits.subList(0, smallerFromEndIndex + 1));
 
                 nextOccurrenceCandidateDigits.clear();
                 nextOccurrenceCandidateDigits.addAll(nextCandidateLeftSide);
