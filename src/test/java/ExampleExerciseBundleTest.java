@@ -2,6 +2,8 @@ import ejercicios.ExampleExerciseBundle;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 public class ExampleExerciseBundleTest extends ConsoleOutputTest {
 
     @Test
@@ -22,6 +24,12 @@ public class ExampleExerciseBundleTest extends ConsoleOutputTest {
         ExampleExerciseBundle.exercise2(expectedName);
 
         assertConsoleOutput("Su nombre es " + expectedName);
+    }
+
+    @Test
+    @DisplayName("broken test")
+    void test() {
+        assertEquals(1, 2);
     }
 
 }
