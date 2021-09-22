@@ -58,14 +58,29 @@ public class Class2ExercisesCollections {
                 20-56
                 34-18
                 309-7*/
-    public static void exercise2() {
+    private static void exercise2() {
         final List<Integer> numbers1 = createListOfNumbers(5, "Lista 1");
         final List<Integer> numbers2 = createListOfNumbers(5, "Lista 2");
 
-        final List<Integer> numbers1Ordered = sortIntegerListAscending(numbers1);
-        final List<Integer> numbers2Ordered = sortIntegerListDescending(numbers2);
+        exercise2(numbers1, numbers2);
+    }
 
-        for(int i = 0; i < 5; i ++) {
+    public static void exercise2(List<Integer> numbers1, List<Integer> numbers2) {
+        final List<Integer> numbers1WithoutNegatives = numbers1
+                .stream().filter(number -> number > 0)
+                        .collect(Collectors.toList());
+
+        final List<Integer> numbers2WithoutNegatives = new ArrayList<>();
+        for (Integer number : numbers2) {
+            if (number > 0) {
+                numbers2WithoutNegatives.add(number);
+            }
+        }
+
+        final List<Integer> numbers1Ordered = sortIntegerListAscending(numbers1WithoutNegatives);
+        final List<Integer> numbers2Ordered = sortIntegerListDescending(numbers2WithoutNegatives);
+
+        for(int i = 0; i < numbers1Ordered.size(); i ++) {
             print(String.format("%s-%s", numbers1Ordered.get(i), numbers2Ordered.get(i)));
         }
     }
@@ -385,7 +400,7 @@ public class Class2ExercisesCollections {
         PREMIER_LEAGUE, SERIE_A, LA_LIGA, PRIMERA_DIVISION
     }
 
-    private enum Color {
+    public enum Color {
         // primaries
         RED, BLUE, YELLOW,
 
@@ -396,22 +411,10 @@ public class Class2ExercisesCollections {
         BROWN;
 
         public static Color fromString(String value) {
-            Color color = null;
-            int index = 0;
-
-            final Color[] colors = Color.values();
-
-            while(color == null && index < colors.length) {
-                final Color c = colors[index];
-
-                if (c.toString().equalsIgnoreCase(value)) {
-                    color = c;
-                }
-
-                index ++;
-            }
-
-            return color;
+            return Arrays.stream(Color.values())
+                    .filter(color -> color.toString().equalsIgnoreCase(value))
+                    .findFirst()
+                    .orElse(null);
         }
     }
 
