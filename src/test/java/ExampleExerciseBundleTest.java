@@ -11,7 +11,7 @@ public class ExampleExerciseBundleTest extends ConsoleOutputTest {
 
         ExampleExerciseBundle.exercise1(expectedAge);
 
-        assertConsoleOutput("Tiene " + expectedAge + 1 + " años");
+        assertConsoleOutput("Tiene " + expectedAge + " años");
     }
 
     @Test
