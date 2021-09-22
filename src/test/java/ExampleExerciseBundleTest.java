@@ -23,5 +23,4 @@ public class ExampleExerciseBundleTest extends ConsoleOutputTest {
 
         assertConsoleOutput("Su nombre es " + expectedName);
     }
-
 }
