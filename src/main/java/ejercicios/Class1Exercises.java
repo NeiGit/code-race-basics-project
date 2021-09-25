@@ -26,9 +26,13 @@ public class Class1Exercises {
     }
 
     // 1. Ingresar un número entero. En caso de ser positivo indicar ‘true’ por pantalla.
-    public static void exercise1() {
+    private static void exercise1() {
         int num = intInput("Ingrese un numero entero");
 
+        exercise1(num);
+    }
+
+    public static void exercise1(int num) {
         if (num > 0) {
             printTrue();
         }
@@ -88,8 +92,8 @@ public class Class1Exercises {
         }
     }
 
-/*    6. Ingresar dos números, 'a' y 'b'. En caso de que ambos sean positivos, para cada uno mostrar 'true' si el resultado
-    de sumarle 1 es par. De modo contrario hacer la misma operación pero sólo para 'a'.*/
+    /*    6. Ingresar dos números, 'a' y 'b'. En caso de que ambos sean positivos, para cada uno mostrar 'true' si el resultado
+        de sumarle 1 es par. De modo contrario hacer la misma operación pero sólo para 'a'.*/
     public static void exercise6() {
         final int a = intInput("Ingrese un numero entero a");
         final int b = intInput("Ingrese un numero entero b");
@@ -103,9 +107,9 @@ public class Class1Exercises {
         }
     }
 
-/*   7. Ingresar tres números 'a', 'b' y 'c'. En caso de que 'a' sea positivo y la suma de 'b' y 'c' sea un número positivo,
-    mostrar 'true'. Si esto último no sucede pero la resta entre 'a' y 'b' es negativa, también mostrar 'true'.
-    En todos los demás casos indicar por pantalla si la resta de los tres números es igual a 0.*/
+    /*   7. Ingresar tres números 'a', 'b' y 'c'. En caso de que 'a' sea positivo y la suma de 'b' y 'c' sea un número positivo,
+        mostrar 'true'. Si esto último no sucede pero la resta entre 'a' y 'b' es negativa, también mostrar 'true'.
+        En todos los demás casos indicar por pantalla si la resta de los tres números es igual a 0.*/
     public static void exercise7() {
         final int a = intInput("Ingrese un numero entero a");
         final int b = intInput("Ingrese un numero entero b");
@@ -232,7 +236,7 @@ public class Class1Exercises {
 
         // validate operation
         if (!sum.equals(operation) && !subtract.equals(operation) && !multiply.equals(operation)
-            && !divide.equals(operation) && !percentage.equals(operation)) {
+                && !divide.equals(operation) && !percentage.equals(operation)) {
             print("error");
             return;
         }

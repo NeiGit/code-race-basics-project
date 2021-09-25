@@ -110,6 +110,10 @@ public class Class2ExercisesLoopsAndText {
     public static void exercise6() {
         final String text = stringInput("Ingrese un texto").toUpperCase();
 
+        print(exercise6(text));
+    }
+
+    public static String exercise6(String text) {
         final char[] charArray = text.toCharArray();
 
         String result = "";
@@ -120,7 +124,7 @@ public class Class2ExercisesLoopsAndText {
             }
         }
 
-        print(result);
+        return result.toUpperCase();
     }
 
     // 7- Ingresar un texto y una letra.
