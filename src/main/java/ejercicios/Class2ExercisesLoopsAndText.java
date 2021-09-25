@@ -79,16 +79,22 @@ public class Class2ExercisesLoopsAndText {
 /*    4- Ingresar números, 0 para terminar. Si el número es par, ingresar otro número e indicar si la
     suma de ambos es par (IOUtil.print(true)). Si la suma es impar, o el primer número lo es,
     indicar que es impar (IOUtil.print(false)).*/
-    public static void exercise4() {
+    private static void exercise4() {
         final String promptMessage = "Ingrese un número entero. 0 para terminar";
 
         int num1 = intInput(promptMessage);
 
         while(num1 != 0) {
-            print(isEven(num1) && isEven(intInput(promptMessage)));
+            final int num2 = intInput(promptMessage);
+
+            print(exercise4(num1, num2));
 
             num1 = intInput(promptMessage);
         }
+    }
+
+    public static boolean exercise4(int num1, int num2) {
+        return isEven(num1) && isEven(num2);
     }
 
     // 5- Ingresar un texto. Mostrar la secuencia de caracteres de forma inversa.
@@ -184,15 +190,15 @@ public class Class2ExercisesLoopsAndText {
     }
 
 /*    11- Ingresar un número entero de 6 cifras.
-    Mostrar la secuencia de números ordenada de forma ascendente. Utilizar tipo de dato double.
+    Mostrar la secuencia de números ordenada de forma ascendente.
     Ej.: entrada = 874396, salida = 346789*/
-    public static void exercise11() {
+    private static void exercise11() {
         inputAndSortNumbersAscending(6);
     }
 
     // 12- Idem 11- indicando primero la cantidad de cifras a ingresar. Mínimo 2 cifras Máximo 8
     // ¿Se puede reutilizar la solución del ej 11?
-    public static void exercise12() {
+    private static void exercise12() {
         final int digits = intInput("Ingrese un número entero entre 2 y 8", i -> i >= 2 && i <= 8);
 
         inputAndSortNumbersAscending(digits);
@@ -349,6 +355,10 @@ public class Class2ExercisesLoopsAndText {
         final int steps = intInput("Ingrese un número del 1 al 10", i -> i > 1 && i <= 10);
         final String character = stringInput("Ingrese un caracter", s -> s.length() == 1);
 
+        buildPicture(consumer, steps, character);
+    }
+
+    public static void buildPicture(TriConsumer consumer, int steps, String character) {
         for (int step = 1; step <= steps; step++) {
             final int dashes = steps - step;
             final int characters = step;
@@ -358,7 +368,7 @@ public class Class2ExercisesLoopsAndText {
     }
 
     @FunctionalInterface
-    private interface TriConsumer {
+    public interface TriConsumer {
         void consume(int characters, int dashes, String character);
     }
 
@@ -560,7 +570,7 @@ public class Class2ExercisesLoopsAndText {
         print(String.format("Último nivel ganado: %s - Puntaje final: %s", level - 1 > 0 ? level - 1 : "-", userScore));
     }
 
-    private static String sortLongDigitsAscending(long challenge) {
+    public static String sortLongDigitsAscending(long challenge) {
         final List<Integer> digitList = new ArrayList<>(Arrays.asList(String.valueOf(challenge).split("")))
                 .stream()
                 .map(Integer::parseInt)

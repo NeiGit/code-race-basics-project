@@ -75,4 +75,44 @@ class Class2ExercisesCollectionsTest extends ConsoleOutputTest {
         assertConsoleOutput("1-100", "5-92", "20-56", "34-18");
     }
 
+    @Test
+    @DisplayName("exercise7Part1 | given 123 | should return ONE-TWO-THREE")
+    void exercise7Part1_given123Ok() {
+        final int num = 123;
+
+        final String result = Class2ExercisesCollections.exercise7Part1(num);
+
+        assertEquals("ONE-TWO-THREE", result);
+    }
+
+    @Test
+    @DisplayName("exercise7Part1 | given 99635 | should return NINE-NINE-SIX-THREE-FIVE")
+    void exercise7Part1_given99635Ok() {
+        final int num = 99635;
+
+        final String result = Class2ExercisesCollections.exercise7Part1(num);
+
+        assertEquals("NINE-NINE-SIX-THREE-FIVE", result);
+    }
+
+    @Test
+    @DisplayName("exercise7Part2 | given ONE-TWO-THREE | should return 123")
+    void exercise7Part2_givenOneTwoThreeOk() {
+        final String numString = "ONE-TWO-THREE";
+
+        final String result = Class2ExercisesCollections.exercise7Part2(numString);
+
+        assertEquals("123", result);
+    }
+
+    @Test
+    @DisplayName("exercise7Part2 | given NINE-NINE-SIX-THREE-FIVE | should return 99635")
+    void exercise7Part1_givenLongNumber() {
+        final String numString = "NINE-NINE-SIX-THREE-FIVE";
+        final String expectedResult = "99635";
+
+        final String result = Class2ExercisesCollections.exercise7Part2(numString);
+
+        assertEquals(expectedResult, result);
+    }
 }

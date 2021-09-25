@@ -13,6 +13,20 @@ import static util.NumberUtil.sortIntegerListDescending;
 
 public class Class2ExercisesCollections {
 
+    private static final Map<Character, Number> NUMBER_NAMES_BY_VALUE = new HashMap<>();
+
+    static {
+        NUMBER_NAMES_BY_VALUE.put('1', Number.ONE);
+        NUMBER_NAMES_BY_VALUE.put('2', Number.TWO);
+        NUMBER_NAMES_BY_VALUE.put('3', Number.THREE);
+        NUMBER_NAMES_BY_VALUE.put('4', Number.FOUR);
+        NUMBER_NAMES_BY_VALUE.put('5', Number.FIVE);
+        NUMBER_NAMES_BY_VALUE.put('6', Number.SIX);
+        NUMBER_NAMES_BY_VALUE.put('7', Number.SEVEN);
+        NUMBER_NAMES_BY_VALUE.put('8', Number.EIGHT);
+        NUMBER_NAMES_BY_VALUE.put('9', Number.NINE);
+    }
+
     public static void subscribeToMenu(Menu mainMenu) {
         final Menu exercises = new Menu("Ejercicios de collections clase 2", mainMenu);
 
@@ -279,19 +293,15 @@ public class Class2ExercisesCollections {
     ¿Se puede reutilizar la solución para hacer el camino inverso? Ingresar UNO-DOS-TRES -> mostrar 123 */
     public static void exercise7() {
         // part 1
-        Map<Character, Number> numberNamesByValue = new HashMap<>();
-        numberNamesByValue.put('1', Number.ONE);
-        numberNamesByValue.put('2', Number.TWO);
-        numberNamesByValue.put('3', Number.THREE);
-        numberNamesByValue.put('4', Number.FOUR);
-        numberNamesByValue.put('5', Number.FIVE);
-        numberNamesByValue.put('6', Number.SIX);
-        numberNamesByValue.put('7', Number.SEVEN);
-        numberNamesByValue.put('8', Number.EIGHT);
-        numberNamesByValue.put('9', Number.NINE);
-
         final int num = intInput("Ingrese un número entero");
+        print(exercise7Part1(num));
 
+        // part 2
+        final String stringNums = stringInput("Ingrese secuencia de numeros separada por guión");
+        print(exercise7Part2(stringNums));
+    }
+
+    public static String exercise7Part1(int num) {
         final char[] numChars = String.valueOf(num).toCharArray();
 
         String numNamesJoined = "";
@@ -300,14 +310,13 @@ public class Class2ExercisesCollections {
                 numNamesJoined += "-";
             }
 
-            numNamesJoined += numberNamesByValue.get(numChar);
+            numNamesJoined += NUMBER_NAMES_BY_VALUE.get(numChar);
         }
 
-        print(numNamesJoined);
+        return numNamesJoined;
+    }
 
-        // part 2
-        final String stringNums = stringInput("Ingrese secuencia de numeros separada por guión");
-
+    public static String exercise7Part2(String stringNums) {
         final List<Number> listOfNumbers = Arrays.stream(stringNums.split("-"))
                 .map(Number::fromString)
                 .collect(Collectors.toList());
@@ -318,9 +327,9 @@ public class Class2ExercisesCollections {
             Character numChar = null;
             int index = 1;
 
-            while(numChar == null && index <= numberNamesByValue.size()) {
+            while(numChar == null && index <= NUMBER_NAMES_BY_VALUE.size()) {
                 final char key = Character.forDigit(index, 10);
-                final Number n = numberNamesByValue.get(key);
+                final Number n = NUMBER_NAMES_BY_VALUE.get(key);
                 if (n == number) {
                     numChar = key;
                 }
@@ -331,7 +340,7 @@ public class Class2ExercisesCollections {
             numCharsJoined.add(String.valueOf(numChar));
         });
 
-        print(String.join("", numCharsJoined));
+        return String.join("", numCharsJoined);
     }
 
     /*Para enfermitos….

@@ -3,7 +3,10 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 class Class2ExercisesLoopsAndTextTest extends ConsoleOutputTest {
 
@@ -33,6 +36,24 @@ class Class2ExercisesLoopsAndTextTest extends ConsoleOutputTest {
     }
 
     @Test
+    @DisplayName("exercise4 | true cases")
+    void exercise4TrueCases() {
+        assertTrue(Class2ExercisesLoopsAndText.exercise4(2, 4));
+        assertTrue(Class2ExercisesLoopsAndText.exercise4(10, -8));
+        assertTrue(Class2ExercisesLoopsAndText.exercise4(6, 6));
+        assertTrue(Class2ExercisesLoopsAndText.exercise4(-56, -4860));
+    }
+
+    @Test
+    @DisplayName("exercise4 | false cases")
+    void exercise4FalseCases() {
+        assertFalse(Class2ExercisesLoopsAndText.exercise4(1, 3));
+        assertFalse(Class2ExercisesLoopsAndText.exercise4(4, 5));
+        assertFalse(Class2ExercisesLoopsAndText.exercise4(3, 2));
+        assertFalse(Class2ExercisesLoopsAndText.exercise4(-55, -4861));
+    }
+
+    @Test
     @DisplayName("exercise6 | given Que no se trabe please | should return QNSTRBPLS")
     void exercise6Ok() {
         // given
@@ -43,5 +64,42 @@ class Class2ExercisesLoopsAndTextTest extends ConsoleOutputTest {
 
         // then
         assertEquals("QNSTRBPLS", result);
+    }
+
+    @Test
+    @DisplayName("sortLongDigitsAscending | given 874396 | should return 346789")
+    void sortLongDigitsAscending_given874396ShouldReturn346789() {
+        assertEquals("346789", Class2ExercisesLoopsAndText.sortLongDigitsAscending(874396));
+    }
+
+    @Test
+    @DisplayName("sortLongDigitsAscending | given 90847578 | should return 04577889")
+    void sortLongDigitsAscending_given90847578ShouldReturn04577889() {
+        assertEquals("04577889", Class2ExercisesLoopsAndText.sortLongDigitsAscending(90847578));
+    }
+
+    @Test
+    @DisplayName("buildPicture | ok")
+    void buildPictureOk() {
+        // given
+        final List<String> expectedResult = new ArrayList<>();
+        expectedResult.add("1-4-a");
+        expectedResult.add("2-3-a");
+        expectedResult.add("3-2-a");
+        expectedResult.add("4-1-a");
+        expectedResult.add("5-0-a");
+
+        final List<String> actualResult = new ArrayList<>();
+
+        final Class2ExercisesLoopsAndText.TriConsumer consumer = (characters, dashes, character) -> {
+            String line = characters + "-" + dashes + "-" + character;
+            actualResult.add(line);
+        };
+
+        // when
+        Class2ExercisesLoopsAndText.buildPicture(consumer, 5, "a");
+
+        // then
+        assertEquals(expectedResult, actualResult);
     }
 }
