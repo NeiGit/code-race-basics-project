@@ -1,4 +1,3 @@
-import clases.Class4POOFiguritas;
 import ejercicios.Class1Exercises;
 import ejercicios.Class2ExercisesCollections;
 import ejercicios.Class2ExercisesLoopsAndText;

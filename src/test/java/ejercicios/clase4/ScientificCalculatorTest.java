@@ -1,4 +1,4 @@
-package ejercicios.clase3;
+package ejercicios.clase4;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

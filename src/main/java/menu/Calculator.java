@@ -1,7 +1,5 @@
 package menu;
 
-import ejercicios.Class2ExercisesCollections;
-
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -15,7 +13,7 @@ public class Calculator {
         operations.put(CalculatorOperation.SUBTRACT, (n1, n2) -> n1 - n2);
         operations.put(CalculatorOperation.MULTIPLY, (n1, n2) -> n1 * n2);
         operations.put(CalculatorOperation.DIVIDE, (n1, n2) -> n1 / n2);
-        operations.put(CalculatorOperation.PERCENTAGE, (n1, n2) -> n1 * (n2 / 100));
+        operations.put(CalculatorOperation.PERCENTAGE, (n1, n2) -> (n1 * 100) / n2);
 
         return operations.get(operation).apply(num1, num2);
     }

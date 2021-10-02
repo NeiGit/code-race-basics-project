@@ -1,4 +1,4 @@
-package ejercicios.clase3;
+package ejercicios.clase4;
 
 public class Calculator {
     protected final double num1;
