@@ -12,8 +12,8 @@ public class Analysis {
     private static final int UP_BEATS_THRESHOLD = 80;
     private static final int SYMPTOMS_THRESHOLD = 2;
     public static final int FIFTY_PERCENT = 50;
-    public static final int FULL_QUARINTINE = 30;
-    public static final int PARTIAL_QUARINTINE = 15;
+    public static final int FULL_QUARANTINE = 30;
+    public static final int PARTIAL_QUARANTINE = 15;
     public static final int EIGHTY_PERCENT = 80;
 
     public static boolean hasCodeVid(Person person) {
@@ -50,7 +50,7 @@ public class Analysis {
 
         if (percentageOfContagious >= FIFTY_PERCENT) {
             final boolean majorityWithFever = hasMajorityWithFever(contagious);
-            final int days = percentageOfContagious > EIGHTY_PERCENT ? FULL_QUARINTINE : PARTIAL_QUARINTINE;
+            final int days = percentageOfContagious > EIGHTY_PERCENT ? FULL_QUARANTINE : PARTIAL_QUARANTINE;
 
             quarantine = new Quarantine(city, days, majorityWithFever);
 
