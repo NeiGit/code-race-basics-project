@@ -1,15 +1,43 @@
 package ejercicios.clase4;
 
-import java.math.BigDecimal;
+import static jdk.nashorn.internal.objects.Global.Infinity;
+
+// 1. Separar redondeo en una clase/objeto aparte Rounder. Pasar por constructor. STRATEGY
+
+// 2. Convertir cada clase de redondeo a un singleton. SINGLETON
+
+// 3. El cliente quiere seguir utilizando el constructor de la calculadora parametrizando un int,
+// no quiere adaptarse a la lógica nueva del objeto Rounder.
+// ¿Se puede incorporar el patrón factory method para permitir esta retrocompatibilidad?
+
+// 4. El cliente quiere tener la posibilidad de contar con los tres tipos de redondeo para cada cálculo que quiera realizar.
+// Es decir, al elegir dos numeros quiere poder construir rápidamente todas las variantes de la calculadora,
+// sin tener que estar cargando de nuevo los números. ¿Se puede resolver con el patrón Builder?
+//
+// Iterar sobre las calculadoras construidas comparando el resultado de todas sus operaciones. BUILDER
+
 
 public class ScientificCalculator extends Calculator {
-    private final int roundingMode;
+    private final Rounder rounder;
 
     public ScientificCalculator(double num1, double num2) {
         super(num1, num2);
 
-        this.roundingMode = 1;
+        this.rounder = fromRoundingMode(1);
     }
+
+    public ScientificCalculator(double num1, double num2, int roundingMode) {
+        super(num1, num2);
+
+        this.rounder = fromRoundingMode(roundingMode);
+    }
+
+    public ScientificCalculator(double num1, double num2, Rounder rounder) {
+        super(num1, num2);
+
+        this.rounder = rounder;
+    }
+
 
     @Override
     public double sum() {
@@ -28,14 +56,13 @@ public class ScientificCalculator extends Calculator {
 
     @Override
     public double divide() {
-        return round(super.divide());
+        try {
+            return round(super.divide());
+        } catch (CalculatorException e) {
+            return Infinity;
+        }
     }
 
-    public ScientificCalculator(double num1, double num2, int roundingMode) {
-        super(num1, num2);
-
-        this.roundingMode = roundingMode;
-    }
 
     public double power() {
         return round(Math.pow(num1, num2));
@@ -50,16 +77,47 @@ public class ScientificCalculator extends Calculator {
     }
 
     private double round(double result) {
-        final BigDecimal bigDecimal = BigDecimal.valueOf(result);
+        return this.rounder.round(result);
+    }
 
+    public static Rounder fromRoundingMode(int roundingMode) {
         switch (roundingMode) {
-            default:
             case 1:
-                return bigDecimal.setScale(2, BigDecimal.ROUND_UP).doubleValue();
+                return UpRounder.getInstance();
             case 2:
-                return bigDecimal.setScale(2, BigDecimal.ROUND_DOWN).doubleValue();
+                return DownRounder.getInstance();
             case 3:
-                return bigDecimal.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+                return HalfUpRounder.getInstance();
+        }
+
+        throw new RuntimeException("Invalid value for roundingMode");
+    }
+
+    public static class Builder {
+        private double num1;
+        private double num2;
+        private Rounder rounder;
+
+        public ScientificCalculator build() {
+            return new ScientificCalculator(num1, num2, rounder);
+        }
+
+        public Builder withNum1(double num1) {
+            this.num1 = num1;
+
+            return this;
+        }
+
+        public Builder withNum2(double num2) {
+            this.num2 = num2;
+
+            return this;
+        }
+
+        public Builder withRounder(Rounder rounder) {
+            this.rounder = rounder;
+
+            return this;
         }
     }
 }

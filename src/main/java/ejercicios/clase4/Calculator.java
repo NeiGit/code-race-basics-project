@@ -21,11 +21,17 @@ public class Calculator {
         return num1 * num2;
     }
 
-    public double divide() {
+    public double divide() throws CalculatorException {
         if (num2 == 0) {
-            return 0;
+            throw new CalculatorException("Cannot divide by zero");
         } else {
             return num1 / num2;
+        }
+    }
+
+    public static class CalculatorException extends Exception {
+        private CalculatorException(String message) {
+            super(message);
         }
     }
 }

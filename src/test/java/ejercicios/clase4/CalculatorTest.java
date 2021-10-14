@@ -4,6 +4,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class CalculatorTest {
 
@@ -39,7 +40,7 @@ class CalculatorTest {
 
     @Test
     @DisplayName("divide | ok")
-    void divide() {
+    void divide() throws Exception {
         final Calculator calculator1 = new Calculator(2, 7);
         final Calculator calculator2 = new Calculator(-10, 4);
 
@@ -52,10 +53,12 @@ class CalculatorTest {
     }
 
     @Test
-    @DisplayName("divide by zero | ok")
-    void divideByZeroOk() {
+    @DisplayName("divide by zero | should throw CalculatorException")
+    void divideByZeroThrowCalculatorException() {
         final Calculator calculator1 = new Calculator(2, 0);
 
-        assertEquals(0, calculator1.divide());
+        final Calculator.CalculatorException exception = assertThrows(Calculator.CalculatorException.class, () -> calculator1.divide());
+
+        assertEquals("Cannot divide by zero", exception.getMessage());
     }
 }
